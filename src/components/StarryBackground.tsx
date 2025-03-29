@@ -14,27 +14,39 @@ const StarryBackground = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     
-    const stars: {
+    interface Star {
       x: number;
       y: number;
       radius: number;
       alpha: number;
       direction: number;
       twinkleSpeed: number;
-    }[] = [];
+      color: string;
+    }
+    
+    const stars: Star[] = [];
     
     // Create stars
     const createStars = () => {
-      const numberOfStars = Math.floor(canvas.width * canvas.height / 1500);
+      const numberOfStars = Math.floor(canvas.width * canvas.height / 1000);
       
       for (let i = 0; i < numberOfStars; i++) {
+        // Determine if star should be white or light blue
+        const colorChoice = Math.random();
+        const color = colorChoice > 0.7 
+          ? `rgba(135, 206, 250, ${0.5 + Math.random() * 0.5})` // Light blue
+          : colorChoice > 0.4 
+            ? `rgba(255, 255, 255, ${0.5 + Math.random() * 0.5})` // White
+            : `rgba(200, 200, 255, ${0.3 + Math.random() * 0.7})`; // Light purple
+        
         stars.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          radius: Math.random() * 1.5,
+          radius: Math.random() * 2,
           alpha: Math.random(),
           direction: Math.random() > 0.5 ? 0.005 : -0.005,
-          twinkleSpeed: Math.random() * 0.01 + 0.003
+          twinkleSpeed: Math.random() * 0.01 + 0.003,
+          color
         });
       }
     };
@@ -46,7 +58,12 @@ const StarryBackground = () => {
       stars.forEach(star => {
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+        
+        // Extract base color and apply current alpha
+        const baseColor = star.color.substring(0, star.color.lastIndexOf(',') + 1);
+        const currentColor = `${baseColor} ${star.alpha})`;
+        
+        ctx.fillStyle = currentColor;
         ctx.fill();
         
         // Twinkle effect

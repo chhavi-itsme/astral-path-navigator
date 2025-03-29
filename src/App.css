@@ -12,11 +12,14 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 1em rgba(121, 80, 242, 0.8));
+  animation: glow 2s ease-in-out infinite;
 }
+
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 1em rgba(97, 218, 251, 0.8));
 }
 
 @keyframes logo-spin {
@@ -36,8 +39,34 @@
 
 .card {
   padding: 2em;
+  background: rgba(30, 30, 50, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transform: translateY(-5px);
 }
 
 .read-the-docs {
-  color: #888;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Futuristic text styling */
+.futuristic-text {
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+/* Gradient text effects */
+.gradient-text {
+  background: linear-gradient(to right, #7950f2, #4cc9f0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

@@ -1,6 +1,31 @@
 
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="32" cy="32" r="16" fill="#E8B77D"/>
-  <ellipse cx="32" cy="32" rx="28" ry="6" transform="rotate(-20 32 32)" stroke="#A384FF" stroke-width="2" stroke-linecap="round"/>
-  <ellipse cx="32" cy="32" rx="24" ry="4" transform="rotate(-20 32 32)" stroke="#A384FF" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Dark space background -->
+  <circle cx="32" cy="32" r="32" fill="#0A0A20"/>
+  
+  <!-- Saturn planet -->
+  <circle cx="32" cy="32" r="16" fill="#E8B77D">
+    <animate attributeName="opacity" values="0.9;1;0.9" dur="3s" repeatCount="indefinite" />
+  </circle>
+  
+  <!-- Saturn ring outer -->
+  <ellipse cx="32" cy="32" rx="28" ry="6" transform="rotate(-20 32 32)" stroke="#7950f2" stroke-width="2" stroke-linecap="round">
+    <animate attributeName="stroke-opacity" values="0.8;1;0.8" dur="4s" repeatCount="indefinite" />
+  </ellipse>
+  
+  <!-- Saturn ring inner -->
+  <ellipse cx="32" cy="32" rx="24" ry="4" transform="rotate(-20 32 32)" stroke="#4cc9f0" stroke-width="1.5" stroke-linecap="round">
+    <animate attributeName="stroke-opacity" values="0.7;1;0.7" dur="5s" repeatCount="indefinite" />
+  </ellipse>
+  
+  <!-- Star highlights -->
+  <circle cx="12" cy="15" r="1" fill="white" opacity="0.8">
+    <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite" />
+  </circle>
+  <circle cx="50" cy="10" r="1" fill="white" opacity="0.8">
+    <animate attributeName="opacity" values="0.3;0.8;0.3" dur="3s" repeatCount="indefinite" />
+  </circle>
+  <circle cx="54" cy="42" r="1" fill="white" opacity="0.8">
+    <animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite" />
+  </circle>
 </svg>

@@ -64,11 +64,11 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				cosmic: {
-					DEFAULT: '#4A2570',
-					dark: '#31174A',
-					light: '#7B4CB0',
-					accent: '#FFB74D',
-					background: '#0D0620'
+					DEFAULT: '#7950f2',
+					dark: '#5f3dc4',
+					light: '#9775fa',
+					accent: '#4cc9f0',
+					background: '#0A0A20'
 				},
 				saturn: {
 					DEFAULT: '#E6AD4C',
@@ -76,9 +76,9 @@ export default {
 					dark: '#C08529'
 				},
 				space: {
-					DEFAULT: '#121212',
-					dark: '#0A0A0A',
-					light: '#2D2D2D'
+					DEFAULT: '#121220',
+					dark: '#0A0A20',
+					light: '#222235'
 				}
 			},
 			borderRadius: {
@@ -108,12 +108,22 @@ export default {
 					'50%': { transform: 'translateY(-10px)' }
 				},
 				'twinkle': {
-					'0%, 100%': { opacity: '1' },
-					'50%': { opacity: '0.5' }
+					'0%, 100%': { opacity: '0.5' },
+					'50%': { opacity: '1' }
 				},
 				'rotate-slow': {
 					'0%': { transform: 'rotate(0deg)' },
 					'100%': { transform: 'rotate(360deg)' }
+				},
+				'pulse-glow': {
+					'0%, 100%': { 
+						opacity: '1',
+						boxShadow: '0 0 20px rgba(121, 80, 242, 0.5)'
+					},
+					'50%': { 
+						opacity: '0.8',
+						boxShadow: '0 0 30px rgba(121, 80, 242, 0.8)'
+					}
 				}
 			},
 			animation: {
@@ -121,15 +131,22 @@ export default {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'float': 'float 6s ease-in-out infinite',
 				'twinkle': 'twinkle 4s ease-in-out infinite',
-				'rotate-slow': 'rotate-slow 60s linear infinite'
+				'rotate-slow': 'rotate-slow 60s linear infinite',
+				'pulse-glow': 'pulse-glow 3s ease-in-out infinite'
 			},
 			fontFamily: {
 				'cosmic': ['Poppins', 'sans-serif']
 			},
 			backgroundImage: {
 				'stars': 'url("/stars-bg.svg")',
-				'cosmic-gradient': 'linear-gradient(to right, #4A2570, #31174A)',
-				'saturn-gradient': 'linear-gradient(to right, #E6AD4C, #C08529)'
+				'cosmic-gradient': 'linear-gradient(to right, #7950f2, #4cc9f0)',
+				'cosmic-radial': 'radial-gradient(circle at center, #7950f2, #0A0A20)',
+				'saturn-gradient': 'linear-gradient(to right, #E6AD4C, #C08529)',
+				'glass-card': 'linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01))'
+			},
+			boxShadow: {
+				'neon': '0 0 5px rgba(121, 80, 242, 0.2), 0 0 20px rgba(121, 80, 242, 0.2), 0 0 40px rgba(121, 80, 242, 0.2)',
+				'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.36)',
 			}
 		}
 	},
