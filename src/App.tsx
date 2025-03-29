@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import StarryBackground from "./components/StarryBackground";
+import FloatingSaturn from "./components/FloatingSaturn";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,12 @@ const App = () => (
       <BrowserRouter>
         <div className="flex flex-col min-h-screen">
           <StarryBackground />
+          {/* Floating Saturn decorations */}
+          <FloatingSaturn size="lg" position="top-20 -left-10" delay={1} />
+          <FloatingSaturn size="sm" position="bottom-40 right-10" delay={2} />
+          <FloatingSaturn size="md" position="top-1/3 right-5" delay={3} />
+          <FloatingSaturn size="sm" position="bottom-10 left-1/4" delay={0.5} />
+          
           <Navbar />
           <main className="flex-grow">
             <Routes>

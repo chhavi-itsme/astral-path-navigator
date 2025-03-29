@@ -16,9 +16,13 @@ const Navbar = () => {
       <div className="cosmic-container">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2">
-              <SaturnLogo className="h-8 w-8" />
-              <span className="text-xl font-bold text-foreground">Saturn Return</span>
+            <Link to="/" className="flex items-center space-x-3 group">
+              <div className="logo relative">
+                <SaturnLogo className="h-10 w-10 animate-[glow_3s_ease-in-out_infinite]" />
+              </div>
+              <span className="text-xl font-bold text-foreground bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent">
+                Saturn Return
+              </span>
             </Link>
           </div>
           <div className="hidden md:flex md:items-center md:space-x-8">
