@@ -9,22 +9,55 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { DatePicker } from '@/components/ui/calendar';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface SaturnReturnData {
-  firstReturn: {
-    startDate: string;
-    endDate: string;
+  birthInfo: {
+    date: string;
+    time: string;
     age: number;
+  };
+  firstReturn: {
+    periods: Array<{
+      date: string;
+      time: string;
+      age: number;
+    }>;
   };
   secondReturn: {
-    startDate: string;
-    endDate: string;
-    age: number;
+    periods: Array<{
+      date: string;
+      time: string;
+      age: number;
+    }>;
   };
-  thirdReturn?: {
-    startDate: string;
-    endDate: string;
-    age: number;
+  thirdReturn: {
+    periods: Array<{
+      date: string;
+      time: string;
+      age: number;
+    }>;
+  };
+  fourthReturn?: {
+    periods: Array<{
+      date: string;
+      time: string;
+      age: number;
+    }>;
+  };
+  fifthReturn?: {
+    periods: Array<{
+      date: string;
+      time: string;
+      age: number;
+    }>;
   };
   currentPhase: string;
   saturnSign: string;
@@ -66,13 +99,58 @@ const Calculator = () => {
     
     // Simulate API call with setTimeout
     setTimeout(() => {
-      // Demo data calculation
+      // Generate demo data
       const birthYear = birthDate.getFullYear();
-      const firstReturnYear = birthYear + 29;
-      const secondReturnYear = birthYear + 59;
-      const thirdReturnYear = birthYear + 88;
+      const birthMonth = birthDate.getMonth();
+      const birthDay = birthDate.getDate();
       
-      const getRandomOffset = () => Math.floor(Math.random() * 10) - 5;
+      // Calculate Saturn sign based on birth date
+      const saturnSigns = [
+        "Aries", "Taurus", "Gemini", "Cancer", 
+        "Leo", "Virgo", "Libra", "Scorpio", 
+        "Sagittarius", "Capricorn", "Aquarius", "Pisces"
+      ];
+      
+      const generateRandomTime = () => {
+        const hours = Math.floor(Math.random() * 24).toString().padStart(2, '0');
+        const minutes = Math.floor(Math.random() * 60).toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+      };
+      
+      const addRandomDaysToDate = (date: Date, maxDays: number) => {
+        const newDate = new Date(date);
+        newDate.setDate(newDate.getDate() + Math.floor(Math.random() * maxDays));
+        return newDate;
+      };
+      
+      const formatDateWithTime = (date: Date) => {
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const month = months[date.getMonth()];
+        const day = date.getDate();
+        const year = date.getFullYear();
+        return `${month} ${day}, ${year}`;
+      };
+      
+      // First Saturn Return (around age 29)
+      const firstReturnDate1 = new Date(birthYear + 29, birthMonth, birthDay);
+      const firstReturnDate2 = addRandomDaysToDate(new Date(birthYear + 29, birthMonth + 6, birthDay), 30);
+      const firstReturnDate3 = addRandomDaysToDate(new Date(birthYear + 30, birthMonth, birthDay), 30);
+      
+      // Second Saturn Return (around age 58)
+      const secondReturnDate1 = new Date(birthYear + 58, birthMonth, birthDay);
+      const secondReturnDate2 = addRandomDaysToDate(new Date(birthYear + 58, birthMonth + 6, birthDay), 30);
+      const secondReturnDate3 = addRandomDaysToDate(new Date(birthYear + 59, birthMonth, birthDay), 30);
+      
+      // Third Saturn Return (around age 88)
+      const thirdReturnDate = new Date(birthYear + 88, birthMonth, birthDay);
+      
+      // Fourth Saturn Return (around age 117)
+      const fourthReturnDate1 = new Date(birthYear + 117, birthMonth, birthDay);
+      const fourthReturnDate2 = addRandomDaysToDate(new Date(birthYear + 117, birthMonth + 6, birthDay), 30);
+      const fourthReturnDate3 = addRandomDaysToDate(new Date(birthYear + 118, birthMonth, birthDay), 30);
+      
+      // Fifth Saturn Return (around age 147)
+      const fifthReturnDate = new Date(birthYear + 147, birthMonth, birthDay);
       
       const calculatePhase = () => {
         const now = new Date();
@@ -82,14 +160,10 @@ const Calculator = () => {
         if (age <= 30) return "First Saturn Return (Major Life Transition)";
         if (age < 56) return "Between Saturn Returns";
         if (age <= 60) return "Second Saturn Return (Wisdom Phase)";
-        return "Post-Second Saturn Return";
+        if (age < 86) return "Post-Second Saturn Return";
+        if (age <= 90) return "Third Saturn Return";
+        return "Post-Third Saturn Return";
       };
-      
-      const saturnSigns = [
-        "Aries", "Taurus", "Gemini", "Cancer", 
-        "Leo", "Virgo", "Libra", "Scorpio", 
-        "Sagittarius", "Capricorn", "Aquarius", "Pisces"
-      ];
       
       const getInsights = (phase: string) => {
         if (phase.includes("First Saturn Return")) {
@@ -131,20 +205,85 @@ const Calculator = () => {
       };
       
       const saturnReturnData: SaturnReturnData = {
+        birthInfo: {
+          date: formatDateWithTime(birthDate),
+          time: birthTime || generateRandomTime(),
+          age: 0
+        },
         firstReturn: {
-          startDate: `${firstReturnYear + getRandomOffset()}-06-15`,
-          endDate: `${firstReturnYear + getRandomOffset() + 2}-02-20`,
-          age: 29
+          periods: [
+            {
+              date: formatDateWithTime(firstReturnDate1),
+              time: `${generateRandomTime()}`,
+              age: 29
+            },
+            {
+              date: formatDateWithTime(firstReturnDate2),
+              time: `${generateRandomTime()}`,
+              age: 29
+            },
+            {
+              date: formatDateWithTime(firstReturnDate3),
+              time: `${generateRandomTime()}`,
+              age: 29
+            }
+          ]
         },
         secondReturn: {
-          startDate: `${secondReturnYear + getRandomOffset()}-07-10`,
-          endDate: `${secondReturnYear + getRandomOffset() + 2}-04-05`,
-          age: 59
+          periods: [
+            {
+              date: formatDateWithTime(secondReturnDate1),
+              time: `${generateRandomTime()}`,
+              age: 58
+            },
+            {
+              date: formatDateWithTime(secondReturnDate2),
+              time: `${generateRandomTime()}`,
+              age: 58
+            },
+            {
+              date: formatDateWithTime(secondReturnDate3),
+              time: `${generateRandomTime()}`,
+              age: 58
+            }
+          ]
         },
         thirdReturn: {
-          startDate: `${thirdReturnYear + getRandomOffset()}-05-22`,
-          endDate: `${thirdReturnYear + getRandomOffset() + 2}-01-18`,
-          age: 88
+          periods: [
+            {
+              date: formatDateWithTime(thirdReturnDate),
+              time: `${generateRandomTime()}`,
+              age: 88
+            }
+          ]
+        },
+        fourthReturn: {
+          periods: [
+            {
+              date: formatDateWithTime(fourthReturnDate1),
+              time: `${generateRandomTime()}`,
+              age: 117
+            },
+            {
+              date: formatDateWithTime(fourthReturnDate2),
+              time: `${generateRandomTime()}`,
+              age: 117
+            },
+            {
+              date: formatDateWithTime(fourthReturnDate3),
+              time: `${generateRandomTime()}`,
+              age: 117
+            }
+          ]
+        },
+        fifthReturn: {
+          periods: [
+            {
+              date: formatDateWithTime(fifthReturnDate),
+              time: `${generateRandomTime()}`,
+              age: 147
+            }
+          ]
         },
         currentPhase: calculatePhase(),
         saturnSign: saturnSigns[birthYear % 12],
@@ -160,15 +299,6 @@ const Calculator = () => {
         duration: 5000,
       });
     }, 2500);
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
   };
 
   return (
@@ -222,6 +352,7 @@ const Calculator = () => {
                             setBirthDateOpen(false);
                           }}
                           initialFocus
+                          className="pointer-events-auto"
                         />
                       </PopoverContent>
                     </Popover>
@@ -304,59 +435,210 @@ const Calculator = () => {
           {/* Results Display */}
           <div>
             {results ? (
-              <Card className="cosmic-card h-full">
+              <Card className="cosmic-card h-full overflow-auto">
                 <CardHeader>
-                  <CardTitle>Your Saturn Return Timeline</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <span>Saturn Returns - {results.saturnSign}</span>
+                  </CardTitle>
                   <CardDescription>
-                    Saturn is in {results.saturnSign} in your birth chart
+                    Current Phase: {results.currentPhase}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-medium mb-2">Current Phase</h3>
-                    <p className="text-accent font-semibold text-xl">{results.currentPhase}</p>
+                  {/* Birth Info Table */}
+                  <div className="overflow-x-auto">
+                    <Table className="border rounded-md">
+                      <TableHeader className="bg-secondary/50">
+                        <TableRow>
+                          <TableHead className="text-center">Age</TableHead>
+                          <TableHead className="text-center">Birth Date</TableHead>
+                          <TableHead className="text-center">Return chart</TableHead>
+                          <TableHead className="text-center">Transits x Natal ch.</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <TableRow className="bg-accent/10">
+                          <TableCell className="text-center">{results.birthInfo.age}</TableCell>
+                          <TableCell className="text-center">{results.birthInfo.date} <span className="text-xs text-muted-foreground">{results.birthInfo.time}</span></TableCell>
+                          <TableCell className="text-center">
+                            <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                              Return chart
+                            </Button>
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                              Transits x Natal ch.
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
                   </div>
 
-                  <Separator />
-
-                  <div>
-                    <h3 className="text-lg font-medium mb-4">Saturn Return Periods</h3>
-                    
-                    <div className="space-y-6">
-                      <div className="cosmic-card p-4">
-                        <h4 className="font-medium text-foreground mb-2">First Saturn Return (Age {results.firstReturn.age})</h4>
-                        <p className="text-muted-foreground text-sm mb-1">
-                          <span className="font-medium">Start Date:</span> {formatDate(results.firstReturn.startDate)}
-                        </p>
-                        <p className="text-muted-foreground text-sm">
-                          <span className="font-medium">End Date:</span> {formatDate(results.firstReturn.endDate)}
-                        </p>
-                      </div>
-                      
-                      <div className="cosmic-card p-4">
-                        <h4 className="font-medium text-foreground mb-2">Second Saturn Return (Age {results.secondReturn.age})</h4>
-                        <p className="text-muted-foreground text-sm mb-1">
-                          <span className="font-medium">Start Date:</span> {formatDate(results.secondReturn.startDate)}
-                        </p>
-                        <p className="text-muted-foreground text-sm">
-                          <span className="font-medium">End Date:</span> {formatDate(results.secondReturn.endDate)}
-                        </p>
-                      </div>
-                      
-                      {results.thirdReturn && (
-                        <div className="cosmic-card p-4">
-                          <h4 className="font-medium text-foreground mb-2">Third Saturn Return (Age {results.thirdReturn.age})</h4>
-                          <p className="text-muted-foreground text-sm mb-1">
-                            <span className="font-medium">Start Date:</span> {formatDate(results.thirdReturn.startDate)}
-                          </p>
-                          <p className="text-muted-foreground text-sm">
-                            <span className="font-medium">End Date:</span> {formatDate(results.thirdReturn.endDate)}
-                          </p>
-                        </div>
-                      )}
+                  {/* First Saturn Return */}
+                  <div className="overflow-x-auto">
+                    <Table className="border rounded-md">
+                      <TableHeader className="bg-secondary/50">
+                        <TableRow>
+                          <TableHead className="text-center">Age</TableHead>
+                          <TableHead className="text-center">First Saturn Return (Age 27 - 30 years)</TableHead>
+                          <TableHead className="text-center">Return chart</TableHead>
+                          <TableHead className="text-center">Transits x Natal ch.</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {results.firstReturn.periods.map((period, index) => (
+                          <TableRow key={`first-${index}`} className={index % 2 === 0 ? "bg-accent/5" : ""}>
+                            <TableCell className="text-center">{period.age}</TableCell>
+                            <TableCell className="text-center">{period.date} <span className="text-xs text-muted-foreground">{period.time}</span></TableCell>
+                            <TableCell className="text-center">
+                              <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                                Return chart{index === 1 ? " (R)" : ""}
+                              </Button>
+                            </TableCell>
+                            <TableCell className="text-center">
+                              <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                                Transits x Natal ch.
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                  
+                  {/* Second Saturn Return */}
+                  <div className="overflow-x-auto">
+                    <Table className="border rounded-md">
+                      <TableHeader className="bg-secondary/50">
+                        <TableRow>
+                          <TableHead className="text-center">Age</TableHead>
+                          <TableHead className="text-center">Second Saturn Return (Age 56 - 59 years)</TableHead>
+                          <TableHead className="text-center">Return chart</TableHead>
+                          <TableHead className="text-center">Transits x Natal ch.</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {results.secondReturn.periods.map((period, index) => (
+                          <TableRow key={`second-${index}`} className={index % 2 === 0 ? "bg-accent/5" : ""}>
+                            <TableCell className="text-center">{period.age}</TableCell>
+                            <TableCell className="text-center">{period.date} <span className="text-xs text-muted-foreground">{period.time}</span></TableCell>
+                            <TableCell className="text-center">
+                              <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                                Return chart{index === 1 ? " (R)" : ""}
+                              </Button>
+                            </TableCell>
+                            <TableCell className="text-center">
+                              <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                                Transits x Natal ch.
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                  
+                  {/* Third Saturn Return */}
+                  <div className="overflow-x-auto">
+                    <Table className="border rounded-md">
+                      <TableHeader className="bg-secondary/50">
+                        <TableRow>
+                          <TableHead className="text-center">Age</TableHead>
+                          <TableHead className="text-center">Third Saturn Return (Age 86 - 89 years)</TableHead>
+                          <TableHead className="text-center">Return chart</TableHead>
+                          <TableHead className="text-center">Transits x Natal ch.</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {results.thirdReturn.periods.map((period, index) => (
+                          <TableRow key={`third-${index}`} className={index % 2 === 0 ? "bg-accent/5" : ""}>
+                            <TableCell className="text-center">{period.age}</TableCell>
+                            <TableCell className="text-center">{period.date} <span className="text-xs text-muted-foreground">{period.time}</span></TableCell>
+                            <TableCell className="text-center">
+                              <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                                Return chart
+                              </Button>
+                            </TableCell>
+                            <TableCell className="text-center">
+                              <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                                Transits x Natal ch.
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                  
+                  {/* Fourth Saturn Return */}
+                  {results.fourthReturn && (
+                    <div className="overflow-x-auto">
+                      <Table className="border rounded-md">
+                        <TableHeader className="bg-secondary/50">
+                          <TableRow>
+                            <TableHead className="text-center">Age</TableHead>
+                            <TableHead className="text-center">Fourth Saturn Return (Age 116 - 119 years)</TableHead>
+                            <TableHead className="text-center">Return chart</TableHead>
+                            <TableHead className="text-center">Transits x Natal ch.</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {results.fourthReturn.periods.map((period, index) => (
+                            <TableRow key={`fourth-${index}`} className={index % 2 === 0 ? "bg-accent/5" : ""}>
+                              <TableCell className="text-center">{period.age}</TableCell>
+                              <TableCell className="text-center">{period.date} <span className="text-xs text-muted-foreground">{period.time}</span></TableCell>
+                              <TableCell className="text-center">
+                                <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                                  Return chart{index === 1 ? " (R)" : ""}
+                                </Button>
+                              </TableCell>
+                              <TableCell className="text-center">
+                                <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                                  Transits x Natal ch.
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
                     </div>
-                  </div>
-
+                  )}
+                  
+                  {/* Fifth Saturn Return */}
+                  {results.fifthReturn && (
+                    <div className="overflow-x-auto">
+                      <Table className="border rounded-md">
+                        <TableHeader className="bg-secondary/50">
+                          <TableRow>
+                            <TableHead className="text-center">Age</TableHead>
+                            <TableHead className="text-center">Fifth Saturn Return (Age 146 - 149 years)</TableHead>
+                            <TableHead className="text-center">Return chart</TableHead>
+                            <TableHead className="text-center">Transits x Natal ch.</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {results.fifthReturn.periods.map((period, index) => (
+                            <TableRow key={`fifth-${index}`} className={index % 2 === 0 ? "bg-accent/5" : ""}>
+                              <TableCell className="text-center">{period.age}</TableCell>
+                              <TableCell className="text-center">{period.date} <span className="text-xs text-muted-foreground">{period.time}</span></TableCell>
+                              <TableCell className="text-center">
+                                <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                                  Return chart
+                                </Button>
+                              </TableCell>
+                              <TableCell className="text-center">
+                                <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                                  Transits x Natal ch.
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  )}
+                  
                   <Separator />
 
                   <div>
