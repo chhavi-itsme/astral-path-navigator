@@ -61,6 +61,7 @@
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-weight: 300;
+  position: relative;
 }
 
 /* Gradient text effects */
@@ -69,4 +70,93 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Sparkling text effect */
+.sparkling-heading {
+  position: relative;
+}
+
+.sparkling-heading::before,
+.sparkling-heading::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.7);
+  animation: heading-sparkle 4s infinite;
+}
+
+.sparkling-heading::before {
+  top: 20%;
+  left: -10px;
+}
+
+.sparkling-heading::after {
+  bottom: 20%;
+  right: -10px;
+  animation-delay: 2s;
+}
+
+@keyframes heading-sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5) translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.5) translateY(-5px);
+  }
+}
+
+/* Star dust effect */
+.star-dust {
+  position: relative;
+  overflow: hidden;
+}
+
+.star-dust::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  background-image: radial-gradient(white 1px, transparent 0);
+  background-size: 20px 20px;
+  opacity: 0.1;
+  animation: star-dust-float 15s infinite linear;
+  pointer-events: none;
+}
+
+@keyframes star-dust-float {
+  0% {
+    transform: rotate(0) translateY(0);
+  }
+  100% {
+    transform: rotate(360deg) translateY(-20px);
+  }
+}
+
+/* Subtle starfield background for sections */
+.starfield-bg {
+  position: relative;
+}
+
+.starfield-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(1px 1px at 25% 25%, rgba(255, 255, 255, 0.2) 50%, transparent 100%),
+    radial-gradient(1px 1px at 50% 50%, rgba(255, 255, 255, 0.1) 50%, transparent 100%),
+    radial-gradient(1px 1px at 75% 75%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+  background-size: 100px 100px;
+  opacity: 0.1;
+  z-index: -1;
 }
