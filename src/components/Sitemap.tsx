@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ExternalLink, ChevronRight } from 'lucide-react';
+import { ExternalLink, ChevronRight, Map } from 'lucide-react';
 
 interface SitemapLink {
   title: string;
@@ -126,7 +126,10 @@ const Sitemap: React.FC<SitemapProps> = ({ className = "" }) => {
 
   return (
     <div className={`cosmic-card p-8 ${className}`}>
-      <h2 className="text-2xl font-bold mb-6 cosmic-title">Sitemap</h2>
+      <h2 className="text-2xl font-bold mb-6 cosmic-title flex items-center">
+        <Map className="mr-2 h-5 w-5" />
+        Sitemap
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <SitemapSection title="Main Navigation" links={mainLinks} />
         <SitemapSection title="Resources" links={resourceLinks} />
