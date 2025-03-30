@@ -6,13 +6,15 @@ interface FloatingStarsTextProps {
   className?: string;
   starCount?: number;
   starColor?: string;
+  shootingStars?: boolean;
 }
 
 const FloatingStarsText: React.FC<FloatingStarsTextProps> = ({
   children,
   className = "",
   starCount = 5,
-  starColor = "white"
+  starColor = "white",
+  shootingStars = false
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   
@@ -51,6 +53,37 @@ const FloatingStarsText: React.FC<FloatingStarsTextProps> = ({
       starElements.push(star);
     }
     
+    // Create shooting stars if enabled
+    if (shootingStars) {
+      for (let i = 0; i < Math.min(3, starCount); i++) {
+        const shootingStar = document.createElement('span');
+        shootingStar.classList.add('shooting-star');
+        
+        // Set random position and angle
+        const top = Math.random() * 100;
+        const left = Math.random() * 100;
+        const angle = Math.random() * 45;
+        
+        // Set styles
+        shootingStar.style.top = `${top}%`;
+        shootingStar.style.left = `${left}%`;
+        shootingStar.style.width = `${Math.random() * 40 + 20}px`;
+        shootingStar.style.height = '1px';
+        shootingStar.style.backgroundColor = starColor;
+        shootingStar.style.position = 'absolute';
+        shootingStar.style.transform = `rotate(${angle}deg)`;
+        shootingStar.style.opacity = '0';
+        shootingStar.style.boxShadow = `0 0 ${Math.random() * 8 + 4}px ${starColor}`;
+        
+        // Set animation with random delay
+        shootingStar.style.animation = `shooting-star ${Math.random() * 3 + 2}s infinite ease-out ${Math.random() * 15}s`;
+        
+        // Append to container
+        container.appendChild(shootingStar);
+        starElements.push(shootingStar);
+      }
+    }
+    
     // Cleanup function
     return () => {
       starElements.forEach(star => {
@@ -59,7 +92,7 @@ const FloatingStarsText: React.FC<FloatingStarsTextProps> = ({
         }
       });
     };
-  }, [starCount, starColor]);
+  }, [starCount, starColor, shootingStars]);
   
   return (
     <div ref={containerRef} className={`relative sparkling-text ${className}`}>

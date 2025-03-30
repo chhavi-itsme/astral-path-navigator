@@ -12,6 +12,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import StarryBackground from "./components/StarryBackground";
 import FloatingSaturn from "./components/FloatingSaturn";
+import ShootingStars from "./components/ShootingStars";
+import Sitemap from "./components/Sitemap";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +25,8 @@ const App = () => (
       <BrowserRouter>
         <div className="flex flex-col min-h-screen">
           <StarryBackground />
+          <ShootingStars count={8} speed={8} />
+          
           {/* Floating Saturn decorations */}
           <FloatingSaturn size="lg" position="top-20 -left-10" delay={1} />
           <FloatingSaturn size="sm" position="bottom-40 right-10" delay={2} />
@@ -38,6 +42,12 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
+          
+          {/* Sitemap */}
+          <div className="cosmic-container mb-12">
+            <Sitemap />
+          </div>
+          
           <Footer />
         </div>
       </BrowserRouter>
