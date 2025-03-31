@@ -11,6 +11,7 @@ import { DatePicker } from '@/components/ui/calendar';
 import SaturnCycleVisualization from '@/components/SaturnCycleVisualization';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { TimePicker } from '@/components/ui/time-picker';
 import {
   Table,
   TableBody,
@@ -436,16 +437,11 @@ const Calculator = () => {
                         </PopoverContent>
                       </Popover>
                     </Label>
-                    <div className="relative">
-                      <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="birthTime"
-                        placeholder="HH:MM (e.g. 14:30)"
-                        className="cosmic-input pl-10"
-                        value={birthTime}
-                        onChange={(e) => setBirthTime(e.target.value)}
-                      />
-                    </div>
+                    <TimePicker 
+                      value={birthTime}
+                      onChange={setBirthTime}
+                      className="cosmic-input"
+                    />
                   </div>
 
                   <div className="space-y-2">
