@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef } from 'react';
-import { SaturnLogo } from '@/components/SaturnLogo';
+import SaturnLogo from '@/components/SaturnLogo';
 
 interface SaturnCycleVisualizationProps {
   currentAge: number;
