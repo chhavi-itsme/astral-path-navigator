@@ -95,18 +95,13 @@ const Sitemap: React.FC<SitemapProps> = ({ className = "" }) => {
       href: '/#about', 
       description: 'Learn what Saturn Return means in astrology',
       sublinks: [
-        { title: 'First Saturn Return', href: '/#first-return' },
-        { title: 'Second Saturn Return', href: '/#second-return' },
-        { title: 'Life Transitions', href: '/#transitions' }
+        { title: 'First Saturn Return', href: '/calculator', },
+        { title: 'Second Saturn Return', href: '/calculator', },
+        { title: 'Life Transitions', href: '/calculator', }
       ]
     },
     { title: 'How Our Calculator Works', href: '/#how-it-works' },
     { title: 'FAQ', href: '/#faq' }
-  ];
-
-  const legalLinks: SitemapLink[] = [
-    { title: 'Privacy Policy', href: '/privacy' },
-    { title: 'Terms of Service', href: '/terms' }
   ];
 
   const externalLinks: SitemapLink[] = [
@@ -130,10 +125,9 @@ const Sitemap: React.FC<SitemapProps> = ({ className = "" }) => {
         <Map className="mr-2 h-5 w-5" />
         Sitemap
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <SitemapSection title="Main Navigation" links={mainLinks} />
         <SitemapSection title="Resources" links={resourceLinks} />
-        <SitemapSection title="Legal" links={legalLinks} />
         <SitemapSection title="External Resources" links={externalLinks} />
       </div>
     </div>
