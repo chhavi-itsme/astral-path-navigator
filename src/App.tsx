@@ -27,11 +27,12 @@ const App = () => (
           <StarryBackground />
           <ShootingStars count={8} speed={8} />
           
-          {/* Floating Saturn decorations */}
-          <FloatingSaturn size="lg" position="top-20 -left-10" delay={1} />
-          <FloatingSaturn size="sm" position="bottom-40 right-10" delay={2} />
-          <FloatingSaturn size="md" position="top-1/3 right-5" delay={3} />
-          <FloatingSaturn size="sm" position="bottom-10 left-1/4" delay={0.5} />
+          {/* Floating Saturn decorations with different variants */}
+          <FloatingSaturn size="lg" position="top-20 -left-10" delay={1} variant="golden" />
+          <FloatingSaturn size="sm" position="bottom-40 right-10" delay={2} variant="purple" />
+          <FloatingSaturn size="md" position="top-1/3 right-5" delay={3} variant="fiery" />
+          <FloatingSaturn size="sm" position="bottom-10 left-1/4" delay={0.5} variant="golden" />
+          <FloatingSaturn size="xl" position="-bottom-32 -right-20 opacity-30" delay={2.5} variant="purple" />
           
           <Navbar />
           <main className="flex-grow">

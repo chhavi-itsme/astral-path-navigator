@@ -14,27 +14,84 @@ const SaturnLogo: React.FC<SaturnLogoProps> = ({ className = "w-10 h-10" }) => {
       xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
-        {/* Enhanced realistic planet gradient */}
+        {/* Enhanced realistic planet gradients */}
         <radialGradient id="saturnLogoGradient" cx="0.5" cy="0.5" r="0.5" fx="0.6" fy="0.4">
-          <stop offset="0%" stopColor="#FEF7CD" />
-          <stop offset="30%" stopColor="#FED89A" />
-          <stop offset="70%" stopColor="#E8B77D" />
-          <stop offset="100%" stopColor="#D89B44" />
+          <stop offset="0%" stopColor="#FEF9E7" />
+          <stop offset="20%" stopColor="#F4D03F" />
+          <stop offset="50%" stopColor="#E9B64D" />
+          <stop offset="80%" stopColor="#CA8A17" />
+          <stop offset="100%" stopColor="#9A7D0A" />
         </radialGradient>
         
-        {/* Enhanced ring gradient with multiple color stops */}
-        <linearGradient id="ringLogoGradient" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#9775FA" stopOpacity="0.3" />
-          <stop offset="20%" stopColor="#A384FF" stopOpacity="0.7" />
-          <stop offset="50%" stopColor="#8B5CF6" stopOpacity="0.9" />
-          <stop offset="80%" stopColor="#7950F2" stopOpacity="0.7" />
-          <stop offset="100%" stopColor="#5F3DC4" stopOpacity="0.3" />
+        {/* Purple Saturn variant */}
+        <radialGradient id="purpleSaturnGradient" cx="0.5" cy="0.5" r="0.5" fx="0.4" fy="0.4">
+          <stop offset="0%" stopColor="#A569BD" />
+          <stop offset="30%" stopColor="#8E44AD" />
+          <stop offset="70%" stopColor="#6C3483" />
+          <stop offset="100%" stopColor="#512E5F" />
+        </radialGradient>
+        
+        {/* Fiery orange Saturn variant */}
+        <radialGradient id="fierySaturnGradient" cx="0.5" cy="0.5" r="0.5" fx="0.6" fy="0.4">
+          <stop offset="0%" stopColor="#FFEFBA" />
+          <stop offset="20%" stopColor="#F5B041" />
+          <stop offset="50%" stopColor="#E67E22" />
+          <stop offset="80%" stopColor="#D35400" />
+          <stop offset="100%" stopColor="#A93226" />
+        </radialGradient>
+        
+        {/* Enhanced golden ring gradient */}
+        <linearGradient id="goldenRingGradient" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#F9E79F" stopOpacity="0.3" />
+          <stop offset="20%" stopColor="#F7DC6F" stopOpacity="0.7" />
+          <stop offset="50%" stopColor="#F1C40F" stopOpacity="0.9" />
+          <stop offset="80%" stopColor="#D4AC0D" stopOpacity="0.7" />
+          <stop offset="100%" stopColor="#9A7D0A" stopOpacity="0.3" />
         </linearGradient>
         
-        {/* Improved glow effect */}
+        {/* Enhanced purple ring gradient */}
+        <linearGradient id="purpleRingGradient" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#D2B4DE" stopOpacity="0.3" />
+          <stop offset="20%" stopColor="#BB8FCE" stopOpacity="0.7" />
+          <stop offset="50%" stopColor="#8E44AD" stopOpacity="0.9" />
+          <stop offset="80%" stopColor="#6C3483" stopOpacity="0.7" />
+          <stop offset="100%" stopColor="#512E5F" stopOpacity="0.3" />
+        </linearGradient>
+        
+        {/* Enhanced fiery ring gradient */}
+        <linearGradient id="fieryRingGradient" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#FFBB9A" stopOpacity="0.3" />
+          <stop offset="20%" stopColor="#F5B041" stopOpacity="0.7" />
+          <stop offset="50%" stopColor="#E67E22" stopOpacity="0.9" />
+          <stop offset="80%" stopColor="#D35400" stopOpacity="0.7" />
+          <stop offset="100%" stopColor="#A93226" stopOpacity="0.3" />
+        </linearGradient>
+        
+        {/* Enhanced glow effects */}
         <filter id="logoGlow" x="-20%" y="-20%" width="140%" height="140%">
           <feGaussianBlur stdDeviation="1.5" result="blur" />
           <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+        
+        <filter id="goldenGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="2" result="blur" />
+          <feFlood flood-color="#F1C40F" flood-opacity="0.5" result="color" />
+          <feComposite in="color" in2="blur" operator="in" result="glow" />
+          <feComposite in="SourceGraphic" in2="glow" operator="over" />
+        </filter>
+        
+        <filter id="purpleGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="2" result="blur" />
+          <feFlood flood-color="#8E44AD" flood-opacity="0.5" result="color" />
+          <feComposite in="color" in2="blur" operator="in" result="glow" />
+          <feComposite in="SourceGraphic" in2="glow" operator="over" />
+        </filter>
+        
+        <filter id="fieryGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="2" result="blur" />
+          <feFlood flood-color="#E67E22" flood-opacity="0.5" result="color" />
+          <feComposite in="color" in2="blur" operator="in" result="glow" />
+          <feComposite in="SourceGraphic" in2="glow" operator="over" />
         </filter>
         
         {/* Enhanced shadow for 3D effect */}
@@ -50,24 +107,25 @@ const SaturnLogo: React.FC<SaturnLogoProps> = ({ className = "w-10 h-10" }) => {
         r="16" 
         fill="url(#saturnLogoGradient)"
         filter="url(#planetShadow)" 
+        className="animate-pulse-slow"
       />
       
-      {/* Detailed surface features */}
-      <ellipse cx="26" cy="28" rx="6" ry="3" fill="#FEF7CD" fillOpacity="0.4" />
-      <ellipse cx="38" cy="36" rx="5" ry="2.5" fill="#D89B44" fillOpacity="0.4" />
-      <ellipse cx="30" cy="34" rx="4" ry="2" fill="#E8B77D" fillOpacity="0.5" />
+      {/* Detailed surface features - golden variant */}
+      <ellipse cx="26" cy="28" rx="6" ry="3" fill="#FEF9E7" fillOpacity="0.4" />
+      <ellipse cx="38" cy="36" rx="5" ry="2.5" fill="#9A7D0A" fillOpacity="0.4" />
+      <ellipse cx="30" cy="34" rx="4" ry="2" fill="#F4D03F" fillOpacity="0.5" />
       
       {/* Realistic surface bands */}
       <path 
         d="M16,32 C16,32 20,29 32,29 C44,29 48,32 48,32" 
-        stroke="#D89B44" 
+        stroke="#9A7D0A" 
         strokeWidth="0.8" 
         strokeOpacity="0.4" 
         fill="none" 
       />
       <path 
         d="M16,36 C16,36 22,39 32,39 C42,39 48,36 48,36" 
-        stroke="#D89B44" 
+        stroke="#9A7D0A" 
         strokeWidth="0.8" 
         strokeOpacity="0.4" 
         fill="none" 
@@ -78,7 +136,7 @@ const SaturnLogo: React.FC<SaturnLogoProps> = ({ className = "w-10 h-10" }) => {
       <circle cx="24" cy="24" r="0.8" fill="#FFFFFF" fillOpacity="0.8" />
       
       {/* Enhanced Saturn Rings with more detail */}
-      <g filter="url(#logoGlow)" className="saturn-ring">
+      <g filter="url(#goldenGlow)" className="saturn-ring">
         {/* Outer ring with dash pattern for more detail */}
         <ellipse 
           cx="32" 
@@ -86,7 +144,7 @@ const SaturnLogo: React.FC<SaturnLogoProps> = ({ className = "w-10 h-10" }) => {
           rx="28" 
           ry="6" 
           transform="rotate(-20 32 32)" 
-          stroke="url(#ringLogoGradient)" 
+          stroke="url(#goldenRingGradient)" 
           strokeWidth="2.5" 
           strokeLinecap="round"
           strokeDasharray="1.5 0.5"
@@ -99,7 +157,7 @@ const SaturnLogo: React.FC<SaturnLogoProps> = ({ className = "w-10 h-10" }) => {
           rx="24" 
           ry="5" 
           transform="rotate(-20 32 32)" 
-          stroke="#A384FF" 
+          stroke="#F7DC6F" 
           strokeWidth="1.5" 
           strokeLinecap="round"
           strokeOpacity="0.8"
@@ -112,7 +170,7 @@ const SaturnLogo: React.FC<SaturnLogoProps> = ({ className = "w-10 h-10" }) => {
           rx="20" 
           ry="4" 
           transform="rotate(-20 32 32)" 
-          stroke="#8B5CF6" 
+          stroke="#F1C40F" 
           strokeWidth="1" 
           strokeLinecap="round"
           strokeOpacity="0.7"
@@ -124,7 +182,7 @@ const SaturnLogo: React.FC<SaturnLogoProps> = ({ className = "w-10 h-10" }) => {
           rx="18" 
           ry="3.5" 
           transform="rotate(-20 32 32)" 
-          stroke="#7950F2" 
+          stroke="#D4AC0D" 
           strokeWidth="0.8" 
           strokeLinecap="round"
           strokeOpacity="0.6"
@@ -143,9 +201,15 @@ const SaturnLogo: React.FC<SaturnLogoProps> = ({ className = "w-10 h-10" }) => {
       </g>
       
       {/* Add stars in background for depth */}
-      <circle cx="12" cy="12" r="0.4" fill="#FFFFFF" fillOpacity="0.8" />
-      <circle cx="56" cy="48" r="0.5" fill="#FFFFFF" fillOpacity="0.7" />
-      <circle cx="52" cy="14" r="0.3" fill="#FFFFFF" fillOpacity="0.9" />
+      <circle cx="12" cy="12" r="0.4" fill="#FFFFFF" fillOpacity="0.8" className="animate-pulse-slow" />
+      <circle cx="56" cy="48" r="0.5" fill="#FFFFFF" fillOpacity="0.7" className="animate-pulse-slow" />
+      <circle cx="52" cy="14" r="0.3" fill="#FFFFFF" fillOpacity="0.9" className="animate-pulse-slow" />
+      
+      {/* Add subtle particles in the rings */}
+      <circle cx="48" cy="28" r="0.3" fill="#FFFFFF" fillOpacity="0.9" className="animate-pulse-slow" />
+      <circle cx="16" cy="36" r="0.3" fill="#FFFFFF" fillOpacity="0.9" className="animate-pulse-slow" />
+      <circle cx="44" cy="36" r="0.3" fill="#FFFFFF" fillOpacity="0.9" className="animate-pulse-slow" />
+      <circle cx="20" cy="28" r="0.3" fill="#FFFFFF" fillOpacity="0.9" className="animate-pulse-slow" />
     </svg>
   );
 };
