@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Calendar, Clock, MapPin, Info, Loader2 } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Calendar, Clock, MapPin, Info, Loader2, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,6 +9,8 @@ import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { DatePicker } from '@/components/ui/calendar';
 import SaturnCycleVisualization from '@/components/SaturnCycleVisualization';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import {
   Table,
   TableBody,
@@ -67,6 +69,7 @@ interface SaturnReturnData {
 const Calculator = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(false);
   const [birthDate, setBirthDate] = useState<Date | undefined>(undefined);
   const [birthTime, setBirthTime] = useState('');
   const [birthCity, setBirthCity] = useState('');
@@ -74,6 +77,7 @@ const Calculator = () => {
   const [results, setResults] = useState<SaturnReturnData | null>(null);
   const [birthDateOpen, setBirthDateOpen] = useState(false);
   const [showDetailedResults, setShowDetailedResults] = useState(true);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   const calculateSaturnReturn = (e: React.FormEvent) => {
     e.preventDefault();
@@ -310,6 +314,58 @@ const Calculator = () => {
     return parseFloat((ageInMs / yearInMs).toFixed(2));
   };
 
+  const toggleDetailedResults = () => {
+    setShowDetailedResults(prev => !prev);
+  };
+
+  const generatePDF = async () => {
+    if (!resultsRef.current || !results) return;
+    
+    setPdfLoading(true);
+    toast({
+      title: "Preparing PDF",
+      description: "Creating your Saturn Return report...",
+    });
+
+    try {
+      const input = resultsRef.current;
+      const canvas = await html2canvas(input, {
+        scale: 2,
+        logging: false,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#000000',
+      });
+      
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      });
+      
+      const imgWidth = 210;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      pdf.save(`saturn-return-${new Date().toISOString().slice(0, 10)}.pdf`);
+      
+      toast({
+        title: "PDF Generated Successfully",
+        description: "Your Saturn Return report has been downloaded.",
+      });
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      toast({
+        title: "Error Generating PDF",
+        description: "There was an issue creating your PDF. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setPdfLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen py-12">
       <div className="cosmic-container">
@@ -452,119 +508,30 @@ const Calculator = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <SaturnCycleVisualization 
-                    currentAge={calculateCurrentAge()} 
-                    birthDate={birthDate}
-                  />
-                  
-                  {showDetailedResults && (
-                    <>
-                      <div className="overflow-x-auto">
-                        <Table className="border rounded-md">
-                          <TableHeader className="bg-secondary/50">
-                            <TableRow>
-                              <TableHead className="text-center">Age</TableHead>
-                              <TableHead className="text-center">Birth Date</TableHead>
-                              <TableHead className="text-center">Return chart</TableHead>
-                              <TableHead className="text-center">Transits x Natal ch.</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            <TableRow className="bg-accent/10">
-                              <TableCell className="text-center">{results.birthInfo.age}</TableCell>
-                              <TableCell className="text-center">{results.birthInfo.date} <span className="text-xs text-muted-foreground">{results.birthInfo.time}</span></TableCell>
-                              <TableCell className="text-center">
-                                <Button variant="link" className="text-accent hover:text-accent/80 p-0">
-                                  Return chart
-                                </Button>
-                              </TableCell>
-                              <TableCell className="text-center">
-                                <Button variant="link" className="text-accent hover:text-accent/80 p-0">
-                                  Transits x Natal ch.
-                                </Button>
-                              </TableCell>
-                            </TableRow>
-                          </TableBody>
-                        </Table>
-                      </div>
-
-                      <div className="overflow-x-auto">
-                        <Table className="border rounded-md">
-                          <TableHeader className="bg-secondary/50">
-                            <TableRow>
-                              <TableHead className="text-center">Age</TableHead>
-                              <TableHead className="text-center">First Saturn Return (Age 27 - 30 years)</TableHead>
-                              <TableHead className="text-center">Return chart</TableHead>
-                              <TableHead className="text-center">Transits x Natal ch.</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {results.firstReturn.periods.map((period, index) => (
-                              <TableRow key={`first-${index}`} className={index % 2 === 0 ? "bg-accent/5" : ""}>
-                                <TableCell className="text-center">{period.age}</TableCell>
-                                <TableCell className="text-center">{period.date} <span className="text-xs text-muted-foreground">{period.time}</span></TableCell>
-                                <TableCell className="text-center">
-                                  <Button variant="link" className="text-accent hover:text-accent/80 p-0">
-                                    Return chart{index === 1 ? " (R)" : ""}
-                                  </Button>
-                                </TableCell>
-                                <TableCell className="text-center">
-                                  <Button variant="link" className="text-accent hover:text-accent/80 p-0">
-                                    Transits x Natal ch.
-                                  </Button>
-                                </TableCell>
+                  <div ref={resultsRef}>
+                    <SaturnCycleVisualization 
+                      currentAge={calculateCurrentAge()} 
+                      birthDate={birthDate}
+                      showDetailedResults={showDetailedResults}
+                      toggleDetailedResults={toggleDetailedResults}
+                    />
+                    
+                    {showDetailedResults && (
+                      <>
+                        <div className="overflow-x-auto">
+                          <Table className="border rounded-md">
+                            <TableHeader className="bg-secondary/50">
+                              <TableRow>
+                                <TableHead className="text-center">Age</TableHead>
+                                <TableHead className="text-center">Birth Date</TableHead>
+                                <TableHead className="text-center">Return chart</TableHead>
+                                <TableHead className="text-center">Transits x Natal ch.</TableHead>
                               </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </div>
-                      
-                      <div className="overflow-x-auto">
-                        <Table className="border rounded-md">
-                          <TableHeader className="bg-secondary/50">
-                            <TableRow>
-                              <TableHead className="text-center">Age</TableHead>
-                              <TableHead className="text-center">Second Saturn Return (Age 56 - 59 years)</TableHead>
-                              <TableHead className="text-center">Return chart</TableHead>
-                              <TableHead className="text-center">Transits x Natal ch.</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {results.secondReturn.periods.map((period, index) => (
-                              <TableRow key={`second-${index}`} className={index % 2 === 0 ? "bg-accent/5" : ""}>
-                                <TableCell className="text-center">{period.age}</TableCell>
-                                <TableCell className="text-center">{period.date} <span className="text-xs text-muted-foreground">{period.time}</span></TableCell>
-                                <TableCell className="text-center">
-                                  <Button variant="link" className="text-accent hover:text-accent/80 p-0">
-                                    Return chart{index === 1 ? " (R)" : ""}
-                                  </Button>
-                                </TableCell>
-                                <TableCell className="text-center">
-                                  <Button variant="link" className="text-accent hover:text-accent/80 p-0">
-                                    Transits x Natal ch.
-                                  </Button>
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </div>
-                      
-                      <div className="overflow-x-auto">
-                        <Table className="border rounded-md">
-                          <TableHeader className="bg-secondary/50">
-                            <TableRow>
-                              <TableHead className="text-center">Age</TableHead>
-                              <TableHead className="text-center">Third Saturn Return (Age 86 - 89 years)</TableHead>
-                              <TableHead className="text-center">Return chart</TableHead>
-                              <TableHead className="text-center">Transits x Natal ch.</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {results.thirdReturn.periods.map((period, index) => (
-                              <TableRow key={`third-${index}`} className={index % 2 === 0 ? "bg-accent/5" : ""}>
-                                <TableCell className="text-center">{period.age}</TableCell>
-                                <TableCell className="text-center">{period.date} <span className="text-xs text-muted-foreground">{period.time}</span></TableCell>
+                            </TableHeader>
+                            <TableBody>
+                              <TableRow className="bg-accent/10">
+                                <TableCell className="text-center">{results.birthInfo.age}</TableCell>
+                                <TableCell className="text-center">{results.birthInfo.date} <span className="text-xs text-muted-foreground">{results.birthInfo.time}</span></TableCell>
                                 <TableCell className="text-center">
                                   <Button variant="link" className="text-accent hover:text-accent/80 p-0">
                                     Return chart
@@ -576,25 +543,23 @@ const Calculator = () => {
                                   </Button>
                                 </TableCell>
                               </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </div>
-                      
-                      {results.fourthReturn && (
+                            </TableBody>
+                          </Table>
+                        </div>
+
                         <div className="overflow-x-auto">
                           <Table className="border rounded-md">
                             <TableHeader className="bg-secondary/50">
                               <TableRow>
                                 <TableHead className="text-center">Age</TableHead>
-                                <TableHead className="text-center">Fourth Saturn Return (Age 116 - 119 years)</TableHead>
+                                <TableHead className="text-center">First Saturn Return (Age 27 - 30 years)</TableHead>
                                 <TableHead className="text-center">Return chart</TableHead>
                                 <TableHead className="text-center">Transits x Natal ch.</TableHead>
                               </TableRow>
                             </TableHeader>
                             <TableBody>
-                              {results.fourthReturn.periods.map((period, index) => (
-                                <TableRow key={`fourth-${index}`} className={index % 2 === 0 ? "bg-accent/5" : ""}>
+                              {results.firstReturn.periods.map((period, index) => (
+                                <TableRow key={`first-${index}`} className={index % 2 === 0 ? "bg-accent/5" : ""}>
                                   <TableCell className="text-center">{period.age}</TableCell>
                                   <TableCell className="text-center">{period.date} <span className="text-xs text-muted-foreground">{period.time}</span></TableCell>
                                   <TableCell className="text-center">
@@ -612,22 +577,51 @@ const Calculator = () => {
                             </TableBody>
                           </Table>
                         </div>
-                      )}
-                      
-                      {results.fifthReturn && (
+                        
                         <div className="overflow-x-auto">
                           <Table className="border rounded-md">
                             <TableHeader className="bg-secondary/50">
                               <TableRow>
                                 <TableHead className="text-center">Age</TableHead>
-                                <TableHead className="text-center">Fifth Saturn Return (Age 146 - 149 years)</TableHead>
+                                <TableHead className="text-center">Second Saturn Return (Age 56 - 59 years)</TableHead>
                                 <TableHead className="text-center">Return chart</TableHead>
                                 <TableHead className="text-center">Transits x Natal ch.</TableHead>
                               </TableRow>
                             </TableHeader>
                             <TableBody>
-                              {results.fifthReturn.periods.map((period, index) => (
-                                <TableRow key={`fifth-${index}`} className={index % 2 === 0 ? "bg-accent/5" : ""}>
+                              {results.secondReturn.periods.map((period, index) => (
+                                <TableRow key={`second-${index}`} className={index % 2 === 0 ? "bg-accent/5" : ""}>
+                                  <TableCell className="text-center">{period.age}</TableCell>
+                                  <TableCell className="text-center">{period.date} <span className="text-xs text-muted-foreground">{period.time}</span></TableCell>
+                                  <TableCell className="text-center">
+                                    <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                                      Return chart{index === 1 ? " (R)" : ""}
+                                    </Button>
+                                  </TableCell>
+                                  <TableCell className="text-center">
+                                    <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                                      Transits x Natal ch.
+                                    </Button>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </div>
+                        
+                        <div className="overflow-x-auto">
+                          <Table className="border rounded-md">
+                            <TableHeader className="bg-secondary/50">
+                              <TableRow>
+                                <TableHead className="text-center">Age</TableHead>
+                                <TableHead className="text-center">Third Saturn Return (Age 86 - 89 years)</TableHead>
+                                <TableHead className="text-center">Return chart</TableHead>
+                                <TableHead className="text-center">Transits x Natal ch.</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {results.thirdReturn.periods.map((period, index) => (
+                                <TableRow key={`third-${index}`} className={index % 2 === 0 ? "bg-accent/5" : ""}>
                                   <TableCell className="text-center">{period.age}</TableCell>
                                   <TableCell className="text-center">{period.date} <span className="text-xs text-muted-foreground">{period.time}</span></TableCell>
                                   <TableCell className="text-center">
@@ -645,25 +639,111 @@ const Calculator = () => {
                             </TableBody>
                           </Table>
                         </div>
-                      )}
-                      
-                      <Separator />
+                        
+                        {results.fourthReturn && (
+                          <div className="overflow-x-auto">
+                            <Table className="border rounded-md">
+                              <TableHeader className="bg-secondary/50">
+                                <TableRow>
+                                  <TableHead className="text-center">Age</TableHead>
+                                  <TableHead className="text-center">Fourth Saturn Return (Age 116 - 119 years)</TableHead>
+                                  <TableHead className="text-center">Return chart</TableHead>
+                                  <TableHead className="text-center">Transits x Natal ch.</TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                {results.fourthReturn.periods.map((period, index) => (
+                                  <TableRow key={`fourth-${index}`} className={index % 2 === 0 ? "bg-accent/5" : ""}>
+                                    <TableCell className="text-center">{period.age}</TableCell>
+                                    <TableCell className="text-center">{period.date} <span className="text-xs text-muted-foreground">{period.time}</span></TableCell>
+                                    <TableCell className="text-center">
+                                      <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                                        Return chart{index === 1 ? " (R)" : ""}
+                                      </Button>
+                                    </TableCell>
+                                    <TableCell className="text-center">
+                                      <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                                        Transits x Natal ch.
+                                      </Button>
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </div>
+                        )}
+                        
+                        {results.fifthReturn && (
+                          <div className="overflow-x-auto">
+                            <Table className="border rounded-md">
+                              <TableHeader className="bg-secondary/50">
+                                <TableRow>
+                                  <TableHead className="text-center">Age</TableHead>
+                                  <TableHead className="text-center">Fifth Saturn Return (Age 146 - 149 years)</TableHead>
+                                  <TableHead className="text-center">Return chart</TableHead>
+                                  <TableHead className="text-center">Transits x Natal ch.</TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                {results.fifthReturn.periods.map((period, index) => (
+                                  <TableRow key={`fifth-${index}`} className={index % 2 === 0 ? "bg-accent/5" : ""}>
+                                    <TableCell className="text-center">{period.age}</TableCell>
+                                    <TableCell className="text-center">{period.date} <span className="text-xs text-muted-foreground">{period.time}</span></TableCell>
+                                    <TableCell className="text-center">
+                                      <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                                        Return chart
+                                      </Button>
+                                    </TableCell>
+                                    <TableCell className="text-center">
+                                      <Button variant="link" className="text-accent hover:text-accent/80 p-0">
+                                        Transits x Natal ch.
+                                      </Button>
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </div>
+                        )}
+                        
+                        <Separator />
 
-                      <div>
-                        <h3 className="text-lg font-medium mb-4">Personalized Insights</h3>
-                        <ul className="space-y-2">
-                          {results.insights.map((insight, index) => (
-                            <li key={index} className="flex items-start">
-                              <div className="bg-accent/10 text-accent rounded-full h-6 w-6 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
-                                {index + 1}
-                              </div>
-                              <p className="text-muted-foreground">{insight}</p>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </>
-                  )}
+                        <div>
+                          <h3 className="text-lg font-medium mb-4">Personalized Insights</h3>
+                          <ul className="space-y-2">
+                            {results.insights.map((insight, index) => (
+                              <li key={index} className="flex items-start">
+                                <div className="bg-accent/10 text-accent rounded-full h-6 w-6 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                                  {index + 1}
+                                </div>
+                                <p className="text-muted-foreground">{insight}</p>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  
+                  <div className="flex justify-center mt-6">
+                    <Button
+                      onClick={generatePDF}
+                      disabled={pdfLoading}
+                      className="w-auto flex gap-2 items-center bg-accent/20 hover:bg-accent/30 text-accent-foreground rounded-full border border-accent/50 transition-colors backdrop-blur-sm shadow-lg hover:shadow-accent/20 transform hover:scale-105"
+                    >
+                      {pdfLoading ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Creating PDF...
+                        </>
+                      ) : (
+                        <>
+                          <Download className="h-4 w-4" />
+                          Save Result as PDF
+                        </>
+                      )}
+                    </Button>
+                  </div>
                 </CardContent>
                 <CardFooter>
                   <p className="text-sm text-muted-foreground italic">

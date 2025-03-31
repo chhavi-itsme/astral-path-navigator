@@ -1,14 +1,20 @@
+
 import React, { useEffect, useRef } from 'react';
 import SaturnLogo from '@/components/SaturnLogo';
+import { Button } from '@/components/ui/button';
 
 interface SaturnCycleVisualizationProps {
   currentAge: number;
   birthDate: Date | undefined;
+  showDetailedResults: boolean;
+  toggleDetailedResults: () => void;
 }
 
 const SaturnCycleVisualization: React.FC<SaturnCycleVisualizationProps> = ({ 
   currentAge, 
-  birthDate 
+  birthDate,
+  showDetailedResults,
+  toggleDetailedResults
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
@@ -271,11 +277,12 @@ const SaturnCycleVisualization: React.FC<SaturnCycleVisualizationProps> = ({
         </div>
       </div>
       
-      <button
+      <Button
+        onClick={toggleDetailedResults}
         className="px-6 py-2 bg-primary/20 hover:bg-primary/30 text-primary-foreground rounded-full border border-primary/50 transition-colors backdrop-blur-sm shadow-lg hover:shadow-primary/20 transform hover:scale-105"
       >
-        Hide Detailed Results
-      </button>
+        {showDetailedResults ? "Hide" : "Show"} Detailed Results
+      </Button>
     </div>
   );
 };
