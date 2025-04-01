@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useCallback, memo } from 'react';
 import { format } from 'date-fns';
 import { Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -17,7 +17,68 @@ interface TimePickerProps {
   className?: string;
 }
 
-export function TimePicker({ value, onChange, className }: TimePickerProps) {
+// Memoize the clock numbers to avoid recreating them on every render
+const ClockNumbers = memo(({ displayHours }: { displayHours: number }) => {
+  return (
+    <>
+      {[12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((num) => {
+        const angle = ((num - 3) * 30) * Math.PI / 180;
+        const radius = 110;
+        const left = Math.cos(angle) * radius + 128;
+        const top = Math.sin(angle) * radius + 128;
+        
+        return (
+          <div 
+            key={num}
+            className={`absolute transform -translate-x-1/2 -translate-y-1/2 text-lg ${num === displayHours ? 'font-bold' : ''}`}
+            style={{ left: `${left}px`, top: `${top}px` }}
+          >
+            {num}
+          </div>
+        );
+      })}
+    </>
+  );
+});
+
+ClockNumbers.displayName = 'ClockNumbers';
+
+// Memoize the clock hand component
+const ClockHand = memo(({ angle, hours }: { angle: number, hours: number }) => {
+  return (
+    <div 
+      className="absolute top-1/2 left-1/2 transform origin-left"
+      style={{ 
+        width: '100px', 
+        height: '2px', 
+        backgroundColor: 'blue',
+        transform: `rotate(${hours * 30 - 90}deg)`,
+        transformOrigin: 'left center'
+      }}
+    />
+  );
+});
+
+ClockHand.displayName = 'ClockHand';
+
+// Memoize the hour marker
+const HourMarker = memo(({ angle, displayHours }: { angle: number, displayHours: number }) => {
+  const left = Math.cos(angle) * 110 + 128;
+  const top = Math.sin(angle) * 110 + 128;
+  
+  return (
+    <div 
+      className="absolute w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2"
+      style={{ left: `${left}px`, top: `${top}px` }}
+    >
+      {displayHours}
+    </div>
+  );
+});
+
+HourMarker.displayName = 'HourMarker';
+
+export const TimePicker = memo(({ value, onChange, className }: TimePickerProps) => {
   const [open, setOpen] = useState(false);
   const [hours, setHours] = useState<number>(
     value ? parseInt(value.split(':')[0]) : 12
@@ -33,8 +94,8 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
   // Convert 24-hour format to 12-hour format
   const displayHours = hours > 12 ? hours - 12 : hours === 0 ? 12 : hours;
 
-  // Update the time when hours, minutes, or period changes
-  useEffect(() => {
+  // Update the time when hours, minutes, or period changes - using useCallback to memoize
+  const updateTime = useCallback(() => {
     const newHours = period === 'PM' && hours < 12 
       ? hours + 12 
       : period === 'AM' && hours === 12 
@@ -44,8 +105,13 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
     onChange(`${newHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`);
   }, [hours, minutes, period, onChange]);
 
-  // Handle clock face clicks
-  const handleClockClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  // Call updateTime when dependencies change
+  React.useEffect(() => {
+    updateTime();
+  }, [hours, minutes, period, updateTime]);
+
+  // Handle clock face clicks - optimized with useCallback
+  const handleClockClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!clockRef.current) return;
     
     const rect = clockRef.current.getBoundingClientRect();
@@ -64,27 +130,37 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
     const normalizedHour = newHour === 0 ? 12 : newHour > 12 ? newHour - 12 : newHour;
     
     setHours(normalizedHour);
-  };
+  }, []);
 
-  const incrementHours = () => {
+  // Handlers as useCallback to prevent recreation
+  const incrementHours = useCallback(() => {
     setHours(prev => (prev === 12 ? 1 : prev + 1));
-  };
+  }, []);
 
-  const decrementHours = () => {
+  const decrementHours = useCallback(() => {
     setHours(prev => (prev === 1 ? 12 : prev - 1));
-  };
+  }, []);
 
-  const incrementMinutes = () => {
+  const incrementMinutes = useCallback(() => {
     setMinutes(prev => (prev === 59 ? 0 : prev + 1));
-  };
+  }, []);
 
-  const decrementMinutes = () => {
+  const decrementMinutes = useCallback(() => {
     setMinutes(prev => (prev === 0 ? 59 : prev - 1));
-  };
+  }, []);
 
-  const togglePeriod = () => {
+  const togglePeriod = useCallback(() => {
     setPeriod(prev => (prev === 'AM' ? 'PM' : 'AM'));
-  };
+  }, []);
+
+  const resetTime = useCallback(() => {
+    setHours(12);
+    setMinutes(0);
+    setPeriod('AM');
+  }, []);
+
+  // Calculate angle for the hand
+  const angle = ((displayHours % 12) * 30 - 90) * Math.PI / 180;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -134,55 +210,17 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
             className="w-64 h-64 rounded-full bg-secondary relative my-4"
             onClick={handleClockClick}
           >
-            {/* Clock Numbers */}
-            {[12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((num, i) => {
-              const angle = ((i * 30) - 90) * Math.PI / 180;
-              const radius = 110;
-              const left = Math.cos(angle) * radius + 128;
-              const top = Math.sin(angle) * radius + 128;
-              
-              return (
-                <div 
-                  key={num}
-                  className={`absolute transform -translate-x-1/2 -translate-y-1/2 text-lg ${num === displayHours ? 'font-bold' : ''}`}
-                  style={{ left: `${left}px`, top: `${top}px` }}
-                >
-                  {num}
-                </div>
-              );
-            })}
+            {/* Clock Numbers - memoized component */}
+            <ClockNumbers displayHours={displayHours} />
             
-            {/* Clock Hand */}
-            <div 
-              className="absolute top-1/2 left-1/2 transform origin-left"
-              style={{ 
-                width: '100px', 
-                height: '2px', 
-                backgroundColor: 'blue',
-                transform: `rotate(${displayHours * 30 - 90}deg)`,
-                transformOrigin: 'left center'
-              }}
-            />
+            {/* Clock Hand - memoized component */}
+            <ClockHand angle={angle} hours={displayHours} />
             
             {/* Center Dot */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-blue-500" />
             
-            {/* Selected Hour Circle */}
-            {(() => {
-              const angle = ((displayHours % 12) * 30 - 90) * Math.PI / 180;
-              const radius = 110;
-              const left = Math.cos(angle) * radius + 128;
-              const top = Math.sin(angle) * radius + 128;
-              
-              return (
-                <div 
-                  className="absolute w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2"
-                  style={{ left: `${left}px`, top: `${top}px` }}
-                >
-                  {displayHours}
-                </div>
-              );
-            })()}
+            {/* Selected Hour Circle - memoized component */}
+            <HourMarker angle={angle} displayHours={displayHours} />
           </div>
           
           {/* Input Controls */}
@@ -227,11 +265,7 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
           <div className="flex justify-between w-full mt-2">
             <Button 
               variant="outline" 
-              onClick={() => {
-                setHours(12);
-                setMinutes(0);
-                setPeriod('AM');
-              }}
+              onClick={resetTime}
             >
               Clear
             </Button>
@@ -241,4 +275,6 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
       </PopoverContent>
     </Popover>
   );
-}
+});
+
+TimePicker.displayName = 'TimePicker';
