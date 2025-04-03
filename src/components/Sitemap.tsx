@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ExternalLink, ChevronRight, Map, Search, Globe, FileText, Home, Calculator, Mail } from 'lucide-react';
@@ -95,9 +94,7 @@ const Sitemap: React.FC<SitemapProps> = ({ className = "" }) => {
   const mainLinks: SitemapLink[] = [
     { title: 'Home', href: '/', description: 'Learn about Saturn Return and our calculator', icon: <Home className="h-4 w-4" /> },
     { title: 'Calculator', href: '/calculator', description: 'Calculate your Saturn Return periods and get personalized insights', icon: <Calculator className="h-4 w-4" /> },
-    { title: 'Contact', href: '/contact', description: 'Get in touch with us about any questions or feedback', icon: <Mail className="h-4 w-4" /> },
-    { title: 'Privacy Policy', href: '/privacy', description: 'Our privacy practices and data handling policies', icon: <FileText className="h-4 w-4" /> },
-    { title: 'Terms of Service', href: '/terms', description: 'Terms and conditions for using our website and calculator', icon: <FileText className="h-4 w-4" /> }
+    { title: 'Contact', href: '/contact', description: 'Get in touch with us about any questions or feedback', icon: <Mail className="h-4 w-4" /> }
   ];
 
   const resourceLinks: SitemapLink[] = [
