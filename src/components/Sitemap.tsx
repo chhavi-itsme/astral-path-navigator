@@ -94,10 +94,10 @@ const SitemapSection: React.FC<SitemapSectionProps> = ({ title, links, icon }) =
 const Sitemap: React.FC<SitemapProps> = ({ className = "" }) => {
   const mainLinks: SitemapLink[] = [
     { title: 'Home', href: '/', description: 'Learn about Saturn Return and our calculator', icon: <Home className="h-4 w-4" /> },
-    { title: 'Calculator', href: '/calculator', description: 'Calculate your Saturn Return', icon: <Calculator className="h-4 w-4" /> },
-    { title: 'Contact', href: '/contact', description: 'Get in touch with us', icon: <Mail className="h-4 w-4" /> },
-    { title: 'Privacy Policy', href: '/privacy', description: 'Our privacy practices', icon: <FileText className="h-4 w-4" /> },
-    { title: 'Terms of Service', href: '/terms', description: 'Terms and conditions', icon: <FileText className="h-4 w-4" /> }
+    { title: 'Calculator', href: '/calculator', description: 'Calculate your Saturn Return periods and get personalized insights', icon: <Calculator className="h-4 w-4" /> },
+    { title: 'Contact', href: '/contact', description: 'Get in touch with us about any questions or feedback', icon: <Mail className="h-4 w-4" /> },
+    { title: 'Privacy Policy', href: '/privacy', description: 'Our privacy practices and data handling policies', icon: <FileText className="h-4 w-4" /> },
+    { title: 'Terms of Service', href: '/terms', description: 'Terms and conditions for using our website and calculator', icon: <FileText className="h-4 w-4" /> }
   ];
 
   const resourceLinks: SitemapLink[] = [
@@ -106,21 +106,21 @@ const Sitemap: React.FC<SitemapProps> = ({ className = "" }) => {
       href: '/#about', 
       description: 'Learn what Saturn Return means in astrology',
       sublinks: [
-        { title: 'First Saturn Return', href: '/calculator' },
-        { title: 'Second Saturn Return', href: '/calculator' },
-        { title: 'Life Transitions', href: '/calculator' }
+        { title: 'First Saturn Return (Ages 27-30)', href: '/calculator' },
+        { title: 'Second Saturn Return (Ages 57-60)', href: '/calculator' },
+        { title: 'Third Saturn Return (Ages 87-90)', href: '/calculator' }
       ]
     },
-    { title: 'How Our Calculator Works', href: '/#how-it-works' },
-    { title: 'FAQ', href: '/#faq' }
+    { title: 'How Our Calculator Works', href: '/#how-it-works', description: 'Understand the astronomical calculations behind our Saturn Return predictions' },
+    { title: 'FAQ', href: '/#faq', description: 'Frequently asked questions about Saturn Return and astrology' }
   ];
 
   const externalLinks: SitemapLink[] = [
     { 
-      title: 'NASA', 
+      title: 'NASA Solar System Exploration: Saturn', 
       href: 'https://www.nasa.gov/solar-system/saturn/', 
       isExternal: true,
-      description: 'NASA\'s Saturn information page',
+      description: 'Official NASA information about the planet Saturn',
       icon: <Globe className="h-4 w-4" />
     },
     { 

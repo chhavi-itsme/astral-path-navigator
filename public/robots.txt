@@ -1,6 +1,7 @@
 
 User-agent: Googlebot
 Allow: /
+Disallow: /admin/
 
 User-agent: Bingbot
 Allow: /
@@ -13,5 +14,6 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /admin/
 
 Sitemap: https://saturnreturn.lovable.dev/sitemap.xml
