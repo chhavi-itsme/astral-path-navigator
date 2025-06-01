@@ -51,12 +51,11 @@ const App = () => (
       <BrowserRouter>
         <div className="flex flex-col min-h-screen">
           <StarryBackground />
-          <ShootingStars count={5} speed={8} /> {/* Reduced count from 8 to 5 */}
+          <ShootingStars count={3} speed={12} />
           
-          {/* Floating Saturn decorations with different variants - reduced number */}
-          <FloatingSaturn size="lg" position="top-20 -left-10" delay={1} variant="golden" />
-          <FloatingSaturn size="sm" position="bottom-40 right-10" delay={2} variant="purple" />
-          <FloatingSaturn size="md" position="top-1/3 right-5" delay={3} variant="fiery" />
+          {/* Reduced floating Saturn decorations for better performance */}
+          <FloatingSaturn size="md" position="top-20 -left-10" delay={2} variant="purple" />
+          <FloatingSaturn size="sm" position="bottom-40 right-10" delay={4} variant="golden" />
           
           <Navbar />
           <main className="flex-grow">
