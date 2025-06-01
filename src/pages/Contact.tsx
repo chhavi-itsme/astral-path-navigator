@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -159,26 +158,6 @@ const Contact = () => {
           </div>
 
           <div className="space-y-8">
-            <Card className="cosmic-card">
-              <CardHeader>
-                <CardTitle>Contact Information</CardTitle>
-                <CardDescription>
-                  Ways to reach us directly
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-start space-x-4">
-                  <div className="bg-accent/10 p-3 rounded-full">
-                    <Mail className="h-5 w-5 text-accent" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium">Email</h3>
-                    <p className="text-muted-foreground">info@saturnreturn.com</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
             <Card className="cosmic-card">
               <CardHeader>
                 <CardTitle>Frequently Asked Questions</CardTitle>

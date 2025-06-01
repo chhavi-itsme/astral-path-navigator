@@ -34,9 +34,6 @@ const Footer = () => {
           
           <div className="flex flex-col space-y-4">
             <h3 className="text-lg font-semibold text-foreground">Contact</h3>
-            <a href="mailto:info@saturnreturn.com" className="text-muted-foreground hover:text-primary transition-colors">
-              info@saturnreturn.com
-            </a>
             <div className="flex space-x-4 mt-2">
               <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -59,7 +56,7 @@ const Footer = () => {
         
         <div className="border-t border-primary/10 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} Saturn Return Calculator. All rights reserved.
+            © {currentYear} saturnreturn.site. All rights reserved.
           </p>
         </div>
       </div>
