@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Clock, Calendar, MapPin, Star } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import FloatingStarsText from '@/components/FloatingStarsText';
 
 const Home = () => {
   const { toast } = useToast();
@@ -31,9 +31,11 @@ const Home = () => {
         <div className="cosmic-container">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex-1 text-center md:text-left">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl cosmic-title mb-6 leading-tight">
-                Discover Your <span className="text-accent sparkling-text">Saturn Return</span> Journey
-              </h1>
+              <FloatingStarsText starCount={8} starColor="rgba(135, 206, 250, 0.8)">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl cosmic-title mb-6 leading-tight">
+                  Discover Your <span className="text-accent sparkling-text">Saturn Return</span> Journey
+                </h1>
+              </FloatingStarsText>
               <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl star-text">
                 Navigate life's major transitions with our accurate Saturn Return calculator. Understand when and how this powerful astrological event will impact your life.
               </p>
@@ -76,7 +78,9 @@ const Home = () => {
       <section id="about" className="py-16 md:py-24 starfield-bg">
         <div className="cosmic-container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl cosmic-title sparkling-heading mb-6">What is a Saturn Return?</h2>
+            <FloatingStarsText starCount={6}>
+              <h2 className="text-3xl md:text-4xl cosmic-title sparkling-heading mb-6">What is a Saturn Return?</h2>
+            </FloatingStarsText>
             <p className="text-lg text-muted-foreground">
               A Saturn Return is an astrological transit that occurs when the planet Saturn returns to the exact same position it was at the time of your birth. This happens approximately every 29.5 years.
             </p>
@@ -120,7 +124,9 @@ const Home = () => {
       <section className="py-16 md:py-24 bg-primary/5">
         <div className="cosmic-container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl cosmic-title mb-6">How Our Calculator Works</h2>
+            <FloatingStarsText starCount={6} starColor="rgba(121, 80, 242, 0.8)">
+              <h2 className="text-3xl md:text-4xl cosmic-title mb-6">How Our Calculator Works</h2>
+            </FloatingStarsText>
             <p className="text-lg text-muted-foreground">
               Our Saturn Return calculator uses precise astronomical data to determine when Saturn will return to its natal position in your birth chart.
             </p>
@@ -218,7 +224,9 @@ const Home = () => {
       <section className="py-16 md:py-24">
         <div className="cosmic-container">
           <div className="cosmic-card p-10 md:p-16 text-center">
-            <h2 className="text-3xl md:text-4xl cosmic-title mb-6">Ready to Discover Your Saturn Return?</h2>
+            <FloatingStarsText starCount={10}>
+              <h2 className="text-3xl md:text-4xl cosmic-title mb-6">Ready to Discover Your Saturn Return?</h2>
+            </FloatingStarsText>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
               Understand the timing and significance of this important astrological transit in your life. Get accurate calculations and personalized insights.
             </p>
