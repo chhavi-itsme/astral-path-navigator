@@ -15,26 +15,10 @@
 
 .logo:hover {
   filter: drop-shadow(0 0 1em rgba(121, 80, 242, 0.8));
-  animation: glow 2s ease-in-out infinite;
 }
 
 .logo.react:hover {
   filter: drop-shadow(0 0 1em rgba(97, 218, 251, 0.8));
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
 }
 
 .card {
@@ -48,20 +32,19 @@
 
 .card:hover {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  transform: translateY(-5px);
+  transform: translateY(-2px);
 }
 
 .read-the-docs {
   color: rgba(255, 255, 255, 0.6);
 }
 
-/* Futuristic text styling */
+/* Simplified text styling */
 .futuristic-text {
   font-family: 'Poppins', sans-serif;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-weight: 300;
-  position: relative;
 }
 
 /* Gradient text effects */
@@ -72,13 +55,12 @@
   background-clip: text;
 }
 
-/* Sparkling text effect */
+/* Minimal sparkling heading - reduced animations */
 .sparkling-heading {
   position: relative;
 }
 
-.sparkling-heading::before,
-.sparkling-heading::after {
+.sparkling-heading::before {
   content: '';
   position: absolute;
   width: 2px;
@@ -86,57 +68,19 @@
   border-radius: 50%;
   background: white;
   box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.7);
-  animation: heading-sparkle 4s infinite;
-}
-
-.sparkling-heading::before {
   top: 20%;
   left: -10px;
-}
-
-.sparkling-heading::after {
-  bottom: 20%;
-  right: -10px;
-  animation-delay: 2s;
+  animation: heading-sparkle 6s infinite;
 }
 
 @keyframes heading-sparkle {
   0%, 100% {
     opacity: 0;
-    transform: scale(0.5) translateY(0);
+    transform: scale(0.5);
   }
   50% {
     opacity: 1;
-    transform: scale(1.5) translateY(-5px);
-  }
-}
-
-/* Star dust effect */
-.star-dust {
-  position: relative;
-  overflow: hidden;
-}
-
-.star-dust::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  right: -50%;
-  bottom: -50%;
-  background-image: radial-gradient(white 1px, transparent 0);
-  background-size: 20px 20px;
-  opacity: 0.1;
-  animation: star-dust-float 15s infinite linear;
-  pointer-events: none;
-}
-
-@keyframes star-dust-float {
-  0% {
-    transform: rotate(0) translateY(0);
-  }
-  100% {
-    transform: rotate(360deg) translateY(-20px);
+    transform: scale(1);
   }
 }
 
@@ -153,65 +97,9 @@
   right: 0;
   bottom: 0;
   background-image: 
-    radial-gradient(1px 1px at 25% 25%, rgba(255, 255, 255, 0.2) 50%, transparent 100%),
-    radial-gradient(1px 1px at 50% 50%, rgba(255, 255, 255, 0.1) 50%, transparent 100%),
-    radial-gradient(1px 1px at 75% 75%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+    radial-gradient(1px 1px at 25% 25%, rgba(255, 255, 255, 0.1) 50%, transparent 100%),
+    radial-gradient(1px 1px at 75% 75%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
   background-size: 100px 100px;
-  opacity: 0.1;
+  opacity: 0.05;
   z-index: -1;
-}
-
-/* Shooting stars animation */
-@keyframes shooting-star {
-  0% {
-    transform: translateX(0) translateY(0) rotate(35deg);
-    opacity: 0;
-  }
-  15% {
-    opacity: 1;
-  }
-  30% {
-    transform: translateX(-100px) translateY(100px) rotate(35deg);
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-.shooting-star {
-  position: absolute;
-  height: 2px;
-  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%);
-  animation: shooting-star 5s infinite;
-}
-
-/* Background shooting stars */
-.bg-shooting-star {
-  position: absolute;
-  height: 2px;
-  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%);
-  opacity: 0;
-  z-index: 1;
-}
-
-.bg-shooting-star:nth-child(1) {
-  width: 150px;
-  top: 10%;
-  left: 30%;
-  animation: shooting-star 8s infinite 1s;
-}
-
-.bg-shooting-star:nth-child(2) {
-  width: 200px;
-  top: 40%;
-  left: 60%;
-  animation: shooting-star 10s infinite 5s;
-}
-
-.bg-shooting-star:nth-child(3) {
-  width: 100px;
-  top: 70%;
-  left: 20%;
-  animation: shooting-star 6s infinite 3s;
 }

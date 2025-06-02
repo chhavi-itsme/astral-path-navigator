@@ -7,9 +7,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import StarryBackground from "./components/StarryBackground";
-import FloatingSaturn from "./components/FloatingSaturn";
-import ShootingStars from "./components/ShootingStars";
 import Sitemap from "./components/Sitemap";
 
 // Lazy load pages for better performance
@@ -21,14 +18,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 // Create loading fallback
 const PageLoader = () => (
   <div className="flex items-center justify-center min-h-[50vh]">
-    <div className="relative w-20 h-20">
-      <div className="absolute inset-0 bg-primary/20 rounded-full filter blur-xl animate-pulse"></div>
-      <div className="w-full h-full animate-spin">
-        <svg viewBox="0 0 100 100" className="w-full h-full">
-          <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="8" fill="none" strokeDasharray="80 170" />
-        </svg>
-      </div>
-    </div>
+    <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
   </div>
 );
 
@@ -36,9 +26,9 @@ const PageLoader = () => (
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false, // Prevent refetching data when window regains focus
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      retry: 1, // Only retry failed requests once
+      refetchOnWindowFocus: false,
+      staleTime: 10 * 60 * 1000, // 10 minutes
+      retry: 1,
     },
   },
 });
@@ -49,14 +39,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <div className="flex flex-col min-h-screen">
-          <StarryBackground />
-          <ShootingStars count={3} speed={12} />
-          
-          {/* Reduced floating Saturn decorations for better performance */}
-          <FloatingSaturn size="md" position="top-20 -left-10" delay={2} variant="purple" />
-          <FloatingSaturn size="sm" position="bottom-40 right-10" delay={4} variant="golden" />
-          
+        <div className="flex flex-col min-h-screen bg-background">
           <Navbar />
           <main className="flex-grow">
             <Suspense fallback={<PageLoader />}>
