@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Clock, Calendar, MapPin, Star } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import FloatingStarsText from '@/components/FloatingStarsText';
+import FloatingSaturn from '@/components/FloatingSaturn';
 
 const Home = () => {
   const { toast } = useToast();
@@ -25,9 +26,46 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="min-h-screen star-dust">
+    <div className="min-h-screen star-dust relative overflow-hidden">
+      {/* Floating Saturn globes */}
+      <FloatingSaturn 
+        size="sm" 
+        position="top-16 left-8" 
+        delay={0} 
+        rotation={-20} 
+        variant="purple" 
+      />
+      <FloatingSaturn 
+        size="md" 
+        position="top-32 right-12" 
+        delay={1.5} 
+        rotation={15} 
+        variant="golden" 
+      />
+      <FloatingSaturn 
+        size="sm" 
+        position="bottom-40 left-16" 
+        delay={2.5} 
+        rotation={-10} 
+        variant="fiery" 
+      />
+      <FloatingSaturn 
+        size="lg" 
+        position="bottom-24 right-8" 
+        delay={0.8} 
+        rotation={30} 
+        variant="purple" 
+      />
+      <FloatingSaturn 
+        size="sm" 
+        position="top-1/2 left-4" 
+        delay={3} 
+        rotation={-25} 
+        variant="golden" 
+      />
+
       {/* Hero Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden">
+      <section className="relative py-20 md:py-32 overflow-hidden z-10">
         <div className="cosmic-container">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex-1 text-center md:text-left">
@@ -75,7 +113,7 @@ const Home = () => {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-16 md:py-24 starfield-bg">
+      <section id="about" className="py-16 md:py-24 starfield-bg relative z-10">
         <div className="cosmic-container">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <FloatingStarsText starCount={6}>
@@ -121,7 +159,7 @@ const Home = () => {
       </section>
 
       {/* How It Works */}
-      <section className="py-16 md:py-24 bg-primary/5">
+      <section className="py-16 md:py-24 bg-primary/5 relative z-10">
         <div className="cosmic-container">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <FloatingStarsText starCount={6} starColor="rgba(121, 80, 242, 0.8)">
@@ -221,7 +259,7 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-24">
+      <section className="py-16 md:py-24 relative z-10">
         <div className="cosmic-container">
           <div className="cosmic-card p-10 md:p-16 text-center">
             <FloatingStarsText starCount={10}>
