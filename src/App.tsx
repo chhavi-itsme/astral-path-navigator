@@ -12,6 +12,8 @@ import Sitemap from "./components/Sitemap";
 // Lazy load pages for better performance
 const Home = lazy(() => import("./pages/Home"));
 const Calculator = lazy(() => import("./pages/Calculator"));
+const About = lazy(() => import("./pages/About"));
+const Blog = lazy(() => import("./pages/Blog"));
 const Contact = lazy(() => import("./pages/Contact"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -46,6 +48,8 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/calculator" element={<Calculator />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/blog" element={<Blog />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>

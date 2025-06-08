@@ -39,6 +39,18 @@ const Navbar = () => {
               Calculator
             </Link>
             <Link
+              to="/about"
+              className="text-foreground hover:text-primary transition-colors duration-300"
+            >
+              About
+            </Link>
+            <Link
+              to="/blog"
+              className="text-foreground hover:text-primary transition-colors duration-300"
+            >
+              Blog
+            </Link>
+            <Link
               to="/contact"
               className="text-foreground hover:text-primary transition-colors duration-300"
             >
@@ -83,6 +95,20 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               Calculator
+            </Link>
+            <Link
+              to="/about"
+              className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-primary/10 hover:text-primary"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              About
+            </Link>
+            <Link
+              to="/blog"
+              className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-primary/10 hover:text-primary"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Blog
             </Link>
             <Link
               to="/contact"
