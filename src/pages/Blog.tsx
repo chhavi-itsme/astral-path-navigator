@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import FloatingStarsText from '@/components/FloatingStarsText';
 import FloatingSaturn from '@/components/FloatingSaturn';
+import AdSenseAd from '@/components/AdSenseAd';
+import EnhancedImage from '@/components/EnhancedImage';
 import { Calendar, Clock, ArrowRight, User } from 'lucide-react';
 
 interface BlogPost {
@@ -14,6 +16,8 @@ interface BlogPost {
   date: string;
   readTime: string;
   category: string;
+  image: string;
+  imageAlt: string;
 }
 
 const blogPosts: BlogPost[] = [
@@ -47,9 +51,11 @@ Most people experience two to three Saturn Returns in their lifetime:
 
 While Saturn Returns can feel challenging, they serve an important purpose in human development. They force us to confront areas of our lives that need restructuring and help us build more authentic, sustainable foundations for the future. Understanding when your Saturn Return is approaching can help you prepare for and embrace these transformative periods with greater awareness and intention.`,
     author: 'Cosmic Insights Team',
-    date: '2024-01-15',
+    date: '2025-05-15',
     readTime: '8 min read',
-    category: 'Astrology Basics'
+    category: 'Astrology Basics',
+    image: 'https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?w=800&q=80',
+    imageAlt: 'Starry night sky representing cosmic cycles and Saturn Return'
   },
   {
     id: 'how-to-use-calculator',
@@ -113,9 +119,11 @@ A: Our calculator can predict Saturn Returns decades in advance, helping you pla
 **Q: Can I calculate Saturn Returns for family members?**
 A: Yes! You can use the calculator for anyone whose birth information you have, making it a great tool for understanding family dynamics and timing.`,
     author: 'Cosmic Insights Team',
-    date: '2024-01-20',
+    date: '2025-05-20',
     readTime: '6 min read',
-    category: 'How-To Guide'
+    category: 'How-To Guide',
+    image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=800&q=80',
+    imageAlt: 'Computer screen showing code and calculations representing our Saturn Return Calculator'
   },
   {
     id: 'signs-of-saturn-return',
@@ -207,9 +215,11 @@ Once you recognize you're in Saturn Return:
 
 While Saturn Return can feel overwhelming, remember that it's ultimately about building a more authentic and sustainable life structure. The challenges you face now are preparing you for greater success and fulfillment in the years to come.`,
     author: 'Cosmic Insights Team',
-    date: '2024-01-25',
+    date: '2025-05-25',
     readTime: '7 min read',
-    category: 'Signs & Symptoms'
+    category: 'Signs & Symptoms',
+    image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80',
+    imageAlt: 'Mountain summit in fog representing life transitions and Saturn Return challenges'
   },
   {
     id: 'meaning-of-saturn-return',
@@ -303,9 +313,11 @@ This isn't just an astrological phase—it's a profound opportunity for consciou
 
 As you navigate your Saturn Return, remember that you're not just surviving a difficult period—you're actively participating in your own transformation. The person you're becoming through this process is exactly who you need to be for your next life chapter.`,
     author: 'Cosmic Insights Team',
-    date: '2024-01-30',
+    date: '2025-05-30',
     readTime: '9 min read',
-    category: 'Deep Dive'
+    category: 'Deep Dive',
+    image: 'https://images.unsplash.com/photo-1500673922987-e212871fec22?w=800&q=80',
+    imageAlt: 'Golden lights between trees representing transformation and spiritual growth during Saturn Return'
   }
 ];
 
@@ -359,14 +371,64 @@ const Blog = () => {
                 <h1 className="text-4xl md:text-5xl cosmic-title mb-6">{selectedPost.title}</h1>
               </FloatingStarsText>
               
-              <div className="inline-block bg-accent/10 text-accent px-3 py-1 rounded-full text-sm font-medium">
+              <div className="inline-block bg-accent/10 text-accent px-3 py-1 rounded-full text-sm font-medium mb-6">
                 {selectedPost.category}
               </div>
+
+              <div className="mb-8 rounded-lg overflow-hidden">
+                <EnhancedImage
+                  src={selectedPost.image}
+                  alt={selectedPost.imageAlt}
+                  className="w-full h-64 md:h-80 object-cover"
+                  priority={true}
+                  width={800}
+                  height={400}
+                />
+              </div>
             </header>
+
+            {/* AdSense Ad - Article Top */}
+            <div className="mb-8">
+              <AdSenseAd 
+                slot="1234567890" 
+                format="rectangle" 
+                className="max-w-md mx-auto"
+              />
+            </div>
 
             <div className="cosmic-card p-8 md:p-12">
               <div className="prose prose-lg max-w-none text-muted-foreground">
                 {selectedPost.content.split('\n\n').map((paragraph, index) => {
+                  // Add ad after 3rd paragraph for longer articles
+                  if (index === 3 && selectedPost.content.split('\n\n').length > 6) {
+                    return (
+                      <React.Fragment key={index}>
+                        {paragraph.startsWith('**') && paragraph.endsWith('**') ? (
+                          <h3 className="text-xl font-semibold text-foreground mt-8 mb-4 sparkling-text">
+                            {paragraph.replace(/\*\*/g, '')}
+                          </h3>
+                        ) : paragraph.startsWith('- ') ? (
+                          <ul className="list-disc list-inside space-y-2 my-6">
+                            {paragraph.split('\n').filter(item => item.startsWith('- ')).map((item, itemIndex) => (
+                              <li key={itemIndex}>{item.substring(2)}</li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p className="mb-6 leading-relaxed">{paragraph}</p>
+                        )}
+                        
+                        {/* Mid-article ad */}
+                        <div className="my-6">
+                          <AdSenseAd 
+                            slot="0987654321" 
+                            format="horizontal" 
+                            className="max-w-lg mx-auto"
+                          />
+                        </div>
+                      </React.Fragment>
+                    );
+                  }
+
                   if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
                     return (
                       <h3 key={index} className="text-xl font-semibold text-foreground mt-8 mb-4 sparkling-text">
@@ -391,6 +453,15 @@ const Blog = () => {
                   );
                 })}
               </div>
+            </div>
+
+            {/* AdSense Ad - Article Bottom */}
+            <div className="mt-8">
+              <AdSenseAd 
+                slot="1357924680" 
+                format="rectangle" 
+                className="max-w-md mx-auto"
+              />
             </div>
           </article>
         </div>
@@ -433,37 +504,80 @@ const Blog = () => {
           </p>
         </div>
 
+        {/* AdSense Ad - Blog Top */}
+        <div className="mb-12">
+          <AdSenseAd 
+            slot="2468135790" 
+            format="horizontal" 
+            className="max-w-2xl mx-auto"
+          />
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {blogPosts.map((post) => (
-            <article key={post.id} className="cosmic-card p-6 hover:shadow-lg transition-all duration-300 group cursor-pointer" onClick={() => setSelectedPost(post)}>
-              <div className="flex items-center gap-4 mb-4 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  {new Date(post.date).toLocaleDateString()}
+          {blogPosts.map((post, index) => (
+            <React.Fragment key={post.id}>
+              <article className="cosmic-card overflow-hidden hover:shadow-lg transition-all duration-300 group cursor-pointer" onClick={() => setSelectedPost(post)}>
+                <div className="h-48 overflow-hidden">
+                  <EnhancedImage
+                    src={post.image}
+                    alt={post.imageAlt}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    width={400}
+                    height={200}
+                  />
                 </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4" />
-                  {post.readTime}
+                
+                <div className="p-6">
+                  <div className="flex items-center gap-4 mb-4 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4" />
+                      {new Date(post.date).toLocaleDateString()}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4" />
+                      {post.readTime}
+                    </div>
+                  </div>
+                  
+                  <div className="inline-block bg-accent/10 text-accent px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    {post.category}
+                  </div>
+                  
+                  <h2 className="text-xl font-semibold mb-3 sparkling-text group-hover:text-accent transition-colors">
+                    {post.title}
+                  </h2>
+                  
+                  <p className="text-muted-foreground mb-4 leading-relaxed">
+                    {post.excerpt}
+                  </p>
+                  
+                  <div className="flex items-center gap-2 text-accent font-medium group-hover:gap-3 transition-all">
+                    Read More <ArrowRight className="h-4 w-4" />
+                  </div>
                 </div>
-              </div>
-              
-              <div className="inline-block bg-accent/10 text-accent px-3 py-1 rounded-full text-sm font-medium mb-4">
-                {post.category}
-              </div>
-              
-              <h2 className="text-xl font-semibold mb-3 sparkling-text group-hover:text-accent transition-colors">
-                {post.title}
-              </h2>
-              
-              <p className="text-muted-foreground mb-4 leading-relaxed">
-                {post.excerpt}
-              </p>
-              
-              <div className="flex items-center gap-2 text-accent font-medium group-hover:gap-3 transition-all">
-                Read More <ArrowRight className="h-4 w-4" />
-              </div>
-            </article>
+              </article>
+
+              {/* Add ad after every 2 blog posts */}
+              {(index + 1) % 2 === 0 && index < blogPosts.length - 1 && (
+                <div className="md:col-span-2 my-4">
+                  <AdSenseAd 
+                    slot="1122334455" 
+                    format="horizontal" 
+                    className="max-w-xl mx-auto"
+                  />
+                </div>
+              )}
+            </React.Fragment>
           ))}
+        </div>
+
+        {/* AdSense Ad - Blog Bottom */}
+        <div className="mt-12">
+          <AdSenseAd 
+            slot="5566778899" 
+            format="rectangle" 
+            className="max-w-md mx-auto"
+          />
         </div>
       </div>
     </div>
