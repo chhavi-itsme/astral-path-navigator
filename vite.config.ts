@@ -34,17 +34,19 @@ export default defineConfig(({ mode }) => ({
         },
       },
     },
-    // Enable compression
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: mode === 'production',
-        drop_debugger: mode === 'production',
+    // Enable compression - only use terser in production
+    minify: mode === 'production' ? 'terser' : 'esbuild',
+    ...(mode === 'production' && {
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+        },
       },
-    },
+    }),
     // Optimize chunk size
     chunkSizeWarningLimit: 1000,
-    // Enable source maps for production debugging
+    // Enable source maps for development debugging
     sourcemap: mode === 'development',
   },
   // Enable compression and caching headers
