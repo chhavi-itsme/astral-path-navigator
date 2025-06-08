@@ -4,6 +4,7 @@ import { ArrowRight, Clock, Calendar, MapPin, Star } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import FloatingStarsText from '@/components/FloatingStarsText';
 import FloatingSaturn from '@/components/FloatingSaturn';
+import AdSenseAd from '@/components/AdSenseAd';
 
 const Home = () => {
   const { toast } = useToast();
@@ -112,6 +113,17 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Ad placement after hero section */}
+      <section className="py-8">
+        <div className="cosmic-container">
+          <AdSenseAd 
+            slot="1234567890" 
+            format="auto" 
+            className="max-w-4xl mx-auto"
+          />
+        </div>
+      </section>
+
       {/* About Section */}
       <section id="about" className="py-16 md:py-24 starfield-bg relative z-10">
         <div className="cosmic-container">
@@ -155,6 +167,17 @@ const Home = () => {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Ad placement between sections */}
+      <section className="py-8 bg-primary/5">
+        <div className="cosmic-container">
+          <AdSenseAd 
+            slot="2345678901" 
+            format="rectangle" 
+            className="max-w-2xl mx-auto"
+          />
         </div>
       </section>
 
@@ -272,6 +295,17 @@ const Home = () => {
               Calculate Now <ArrowRight className="h-5 w-5" />
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Final ad placement */}
+      <section className="py-8">
+        <div className="cosmic-container">
+          <AdSenseAd 
+            slot="3456789012" 
+            format="horizontal" 
+            className="max-w-4xl mx-auto"
+          />
         </div>
       </section>
     </div>

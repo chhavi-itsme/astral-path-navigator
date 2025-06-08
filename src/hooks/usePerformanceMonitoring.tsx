@@ -7,6 +7,11 @@ interface PerformanceMetrics {
   cls?: number;
 }
 
+interface LayoutShiftEntry extends PerformanceEntry {
+  value: number;
+  hadRecentInput: boolean;
+}
+
 export const usePerformanceMonitoring = () => {
   useEffect(() => {
     // Monitor Largest Contentful Paint (LCP)
@@ -28,8 +33,9 @@ export const usePerformanceMonitoring = () => {
     let clsValue = 0;
     const clsObserver = new PerformanceObserver((entryList) => {
       for (const entry of entryList.getEntries()) {
-        if (!entry.hadRecentInput) {
-          clsValue += (entry as any).value;
+        const layoutShiftEntry = entry as LayoutShiftEntry;
+        if (!layoutShiftEntry.hadRecentInput) {
+          clsValue += layoutShiftEntry.value;
         }
       }
       console.log('CLS:', clsValue);
