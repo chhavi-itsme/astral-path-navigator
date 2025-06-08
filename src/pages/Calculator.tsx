@@ -1,27 +1,31 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import SaturnReturnForm from '@/components/calculator/SaturnReturnForm';
 import SaturnReturnResults from '@/components/calculator/SaturnReturnResults';
 import ResultsPlaceholder from '@/components/calculator/ResultsPlaceholder';
 import FloatingSaturn from '@/components/FloatingSaturn';
 import FloatingStarsText from '@/components/FloatingStarsText';
+import LoadingSkeleton from '@/components/LoadingSkeleton';
+import { usePageCache } from '@/hooks/usePageCache';
 import { SaturnReturnData } from '@/types/saturn-calculator-types';
 
 const Calculator = () => {
   const [birthDate, setBirthDate] = useState<Date | undefined>(undefined);
   const [results, setResults] = useState<SaturnReturnData | null>(null);
+  const [isCalculating, setIsCalculating] = useState(false);
+  
+  // Cache calculator results
+  const { cachedData, setCacheData } = usePageCache<{
+    birthDate: Date;
+    results: SaturnReturnData;
+  }>({
+    key: 'saturn-calculator-results',
+    ttl: 5 * 60 * 1000 // 5 minutes cache
+  });
 
-  const handleCalculate = (returnData: SaturnReturnData) => {
-    setResults(returnData);
-  };
-
-  const handleBirthDateChange = (date: Date | undefined) => {
-    setBirthDate(date);
-  };
-
-  return (
-    <div className="min-h-screen py-12 relative overflow-hidden">
-      {/* Floating Saturn globes */}
+  // Memoized floating Saturn elements for performance
+  const floatingElements = useMemo(() => (
+    <>
       <FloatingSaturn 
         size="sm" 
         position="top-10 left-10" 
@@ -50,6 +54,40 @@ const Calculator = () => {
         rotation={25} 
         variant="golden" 
       />
+    </>
+  ), []);
+
+  const handleCalculate = async (returnData: SaturnReturnData) => {
+    setIsCalculating(true);
+    
+    // Simulate calculation time for better UX
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    setResults(returnData);
+    
+    // Cache the results
+    if (birthDate) {
+      setCacheData({ birthDate, results: returnData });
+    }
+    
+    setIsCalculating(false);
+  };
+
+  const handleBirthDateChange = (date: Date | undefined) => {
+    setBirthDate(date);
+    
+    // Check if we have cached results for this date
+    if (date && cachedData && cachedData.birthDate.getTime() === date.getTime()) {
+      setResults(cachedData.results);
+    } else {
+      setResults(null);
+    }
+  };
+
+  return (
+    <div className="min-h-screen py-12 relative overflow-hidden">
+      {/* Floating Saturn globes - memoized for performance */}
+      {floatingElements}
 
       <div className="cosmic-container relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12">
@@ -70,7 +108,9 @@ const Calculator = () => {
           </div>
 
           <div>
-            {results ? (
+            {isCalculating ? (
+              <LoadingSkeleton variant="calculator" />
+            ) : results ? (
               <SaturnReturnResults results={results} birthDate={birthDate} />
             ) : (
               <ResultsPlaceholder />
