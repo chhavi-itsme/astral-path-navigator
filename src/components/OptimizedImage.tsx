@@ -7,21 +7,34 @@ interface OptimizedImageProps {
   className?: string;
   placeholder?: string;
   lazy?: boolean;
+  width?: number;
+  height?: number;
+  priority?: boolean;
 }
 
 const OptimizedImage: React.FC<OptimizedImageProps> = ({
   src,
   alt,
   className = '',
-  placeholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzMzMzMzMyIvPjwvc3ZnPg==',
-  lazy = true
+  placeholder,
+  lazy = true,
+  width,
+  height,
+  priority = false
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isInView, setIsInView] = useState(!lazy);
+  const [isInView, setIsInView] = useState(!lazy || priority);
   const imgRef = useRef<HTMLImageElement>(null);
 
+  // Generate placeholder with proper dimensions to prevent CLS
+  const defaultPlaceholder = `data:image/svg+xml;base64,${btoa(
+    `<svg width="${width || 400}" height="${height || 300}" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="#f3f4f6"/>
+    </svg>`
+  )}`;
+
   useEffect(() => {
-    if (!lazy) return;
+    if (!lazy || priority) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -30,7 +43,10 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           observer.disconnect();
         }
       },
-      { threshold: 0.1 }
+      { 
+        threshold: 0.1,
+        rootMargin: '100px' // Preload images 100px before they come into view
+      }
     );
 
     if (imgRef.current) {
@@ -38,27 +54,44 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     }
 
     return () => observer.disconnect();
-  }, [lazy]);
+  }, [lazy, priority]);
+
+  const containerStyle = width && height ? {
+    width: `${width}px`,
+    height: `${height}px`,
+    minWidth: `${width}px`,
+    minHeight: `${height}px`
+  } : {};
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
+    <div 
+      className={`relative overflow-hidden ${className}`}
+      style={containerStyle}
+      ref={imgRef}
+    >
       {!isLoaded && (
         <img
-          src={placeholder}
+          src={placeholder || defaultPlaceholder}
           alt=""
-          className={`absolute inset-0 w-full h-full object-cover filter blur-sm ${className}`}
+          className="absolute inset-0 w-full h-full object-cover"
+          width={width}
+          height={height}
+          aria-hidden="true"
         />
       )}
       {isInView && (
         <img
-          ref={imgRef}
           src={src}
           alt={alt}
           className={`w-full h-full object-cover transition-opacity duration-300 ${
             isLoaded ? 'opacity-100' : 'opacity-0'
-          } ${className}`}
+          }`}
           onLoad={() => setIsLoaded(true)}
-          loading={lazy ? 'lazy' : 'eager'}
+          loading={priority ? 'eager' : 'lazy'}
+          decoding="async"
+          width={width}
+          height={height}
+          fetchPriority={priority ? 'high' : 'low'}
         />
       )}
     </div>

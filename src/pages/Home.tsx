@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Clock, Calendar, MapPin, Star } from 'lucide-react';
@@ -5,6 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 import FloatingStarsText from '@/components/FloatingStarsText';
 import FloatingSaturn from '@/components/FloatingSaturn';
 import AdSenseAd from '@/components/AdSenseAd';
+import OptimizedImage from '@/components/OptimizedImage';
 
 const Home = () => {
   const { toast } = useToast();
@@ -91,7 +93,7 @@ const Home = () => {
               <div className="relative w-80 h-80 md:w-96 md:h-96 mx-auto">
                 <div className="absolute inset-0 bg-primary/20 rounded-full filter blur-3xl animate-pulse"></div>
                 <div className="relative z-10 animate-float">
-                  <svg viewBox="0 0 200 200" className="w-full h-full">
+                  <svg viewBox="0 0 200 200" className="w-full h-full" width="400" height="400">
                     <circle cx="100" cy="100" r="60" fill="#E6AD4C" />
                     <ellipse
                       cx="100"
@@ -110,17 +112,6 @@ const Home = () => {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Ad placement after hero section */}
-      <section className="py-8">
-        <div className="cosmic-container">
-          <AdSenseAd 
-            slot="1234567890" 
-            format="auto" 
-            className="max-w-4xl mx-auto"
-          />
         </div>
       </section>
 
@@ -171,12 +162,12 @@ const Home = () => {
       </section>
 
       {/* Ad placement between sections */}
-      <section className="py-8 bg-primary/5">
+      <section className="py-4 bg-primary/5">
         <div className="cosmic-container">
           <AdSenseAd 
             slot="2345678901" 
             format="rectangle" 
-            className="max-w-2xl mx-auto"
+            className="max-w-md mx-auto"
           />
         </div>
       </section>
@@ -299,12 +290,12 @@ const Home = () => {
       </section>
 
       {/* Final ad placement */}
-      <section className="py-8">
+      <section className="py-4">
         <div className="cosmic-container">
           <AdSenseAd 
             slot="3456789012" 
             format="horizontal" 
-            className="max-w-4xl mx-auto"
+            className="max-w-2xl mx-auto"
           />
         </div>
       </section>

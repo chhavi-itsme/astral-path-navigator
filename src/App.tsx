@@ -10,9 +10,10 @@ import Footer from "./components/Footer";
 import Sitemap from "./components/Sitemap";
 import LoadingSkeleton from "./components/LoadingSkeleton";
 import PerformanceOptimizer from "./components/PerformanceOptimizer";
+import CriticalResourcePreloader from "./components/CriticalResourcePreloader";
 import { usePerformanceMonitoring } from "./hooks/usePerformanceMonitoring";
 
-// Lazy load pages with intelligent preloading
+// Lazy load pages with intelligent preloading and priority hints
 const Home = lazy(() => 
   import("./pages/Home").then(module => {
     // Preload calculator and about pages when home loads
@@ -45,9 +46,9 @@ const Blog = lazy(() => import("./pages/Blog"));
 const Contact = lazy(() => import("./pages/Contact"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-// Enhanced loading fallback with better skeleton
+// Enhanced loading fallback with better skeleton and no CLS
 const PageLoader = () => (
-  <div className="min-h-[50vh] py-12">
+  <div className="min-h-[50vh] py-12" style={{ minHeight: '400px' }}>
     <div className="cosmic-container">
       <LoadingSkeleton variant="hero" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -57,29 +58,28 @@ const PageLoader = () => (
   </div>
 );
 
-// Optimized query client with better caching and compression
+// Highly optimized query client with aggressive caching
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
-      staleTime: 30 * 60 * 1000, // 30 minutes
-      gcTime: 60 * 60 * 1000, // 1 hour
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 30 * 60 * 1000, // 30 minutes
       retry: (failureCount, error) => {
-        // Smart retry with exponential backoff
-        if (failureCount < 3) return true;
+        if (failureCount < 2) return true;
         return false;
       },
-      retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
-      networkMode: 'offlineFirst', // Better offline support
+      retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 10000),
+      networkMode: 'offlineFirst',
     },
     mutations: {
-      retry: 2,
+      retry: 1,
       networkMode: 'offlineFirst',
     },
   },
 });
 
-// Enhanced service worker registration with update handling
+// Enhanced service worker registration with better update handling
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js', {
@@ -87,23 +87,25 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
       updateViaCache: 'none'
     })
       .then(registration => {
-        console.log('SW registered: ', registration);
+        console.log('SW registered with scope:', registration.scope);
         
-        // Handle updates
+        // Handle updates more efficiently
         registration.addEventListener('updatefound', () => {
           const newWorker = registration.installing;
           if (newWorker) {
             newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                // New content available, could show update notification
-                console.log('New content available, please refresh');
+                // Show update notification without forcing reload
+                console.log('New content available');
+                // Could dispatch custom event for update notification
+                window.dispatchEvent(new CustomEvent('sw-update-available'));
               }
             });
           }
         });
       })
       .catch(registrationError => {
-        console.log('SW registration failed: ', registrationError);
+        console.log('SW registration failed:', registrationError);
       });
   });
 }
@@ -117,6 +119,7 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <CriticalResourcePreloader />
         <BrowserRouter>
           <div className="flex flex-col min-h-screen bg-background">
             <Navbar />

@@ -15,8 +15,8 @@ const EnhancedImage: React.FC<EnhancedImageProps> = ({
   src,
   alt,
   className = '',
-  width,
-  height,
+  width = 400,
+  height = 300,
   priority = false,
   quality = 80
 }) => {
@@ -67,20 +67,30 @@ const EnhancedImage: React.FC<EnhancedImageProps> = ({
   }, [isInView, src, width, quality]);
 
   const placeholderSrc = `data:image/svg+xml;base64,${btoa(
-    `<svg width="${width || 400}" height="${height || 300}" xmlns="http://www.w3.org/2000/svg">
+    `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
       <rect width="100%" height="100%" fill="#f3f4f6"/>
-      <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#9ca3af">Loading...</text>
     </svg>`
   )}`;
 
   return (
-    <div className={`relative overflow-hidden ${className}`} ref={imgRef}>
+    <div 
+      className={`relative overflow-hidden ${className}`} 
+      ref={imgRef}
+      style={{ 
+        width: `${width}px`, 
+        height: `${height}px`,
+        minWidth: `${width}px`,
+        minHeight: `${height}px`
+      }}
+    >
       {!isLoaded && (
         <img
           src={placeholderSrc}
           alt=""
-          className="absolute inset-0 w-full h-full object-cover filter blur-sm"
-          style={{ width, height }}
+          className="absolute inset-0 w-full h-full object-cover"
+          width={width}
+          height={height}
+          aria-hidden="true"
         />
       )}
       {isInView && (
@@ -93,7 +103,9 @@ const EnhancedImage: React.FC<EnhancedImageProps> = ({
           onLoad={() => setIsLoaded(true)}
           loading={priority ? 'eager' : 'lazy'}
           decoding="async"
-          style={{ width, height }}
+          width={width}
+          height={height}
+          fetchPriority={priority ? 'high' : 'low'}
         />
       )}
     </div>

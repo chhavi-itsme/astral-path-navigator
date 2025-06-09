@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import FloatingStarsText from '@/components/FloatingStarsText';
 import FloatingSaturn from '@/components/FloatingSaturn';
 import AdSenseAd from '@/components/AdSenseAd';
-import EnhancedImage from '@/components/EnhancedImage';
+import OptimizedImage from '@/components/OptimizedImage';
 import { Calendar, Clock, ArrowRight, User } from 'lucide-react';
 
 interface BlogPost {
@@ -376,10 +376,10 @@ const Blog = () => {
               </div>
 
               <div className="mb-8 rounded-lg overflow-hidden">
-                <EnhancedImage
+                <OptimizedImage
                   src={selectedPost.image}
                   alt={selectedPost.imageAlt}
-                  className="w-full h-64 md:h-80 object-cover"
+                  className="w-full object-cover"
                   priority={true}
                   width={800}
                   height={400}
@@ -388,7 +388,7 @@ const Blog = () => {
             </header>
 
             {/* AdSense Ad - Article Top */}
-            <div className="mb-8">
+            <div className="mb-6">
               <AdSenseAd 
                 slot="1234567890" 
                 format="rectangle" 
@@ -418,7 +418,7 @@ const Blog = () => {
                         )}
                         
                         {/* Mid-article ad */}
-                        <div className="my-6">
+                        <div className="my-4">
                           <AdSenseAd 
                             slot="0987654321" 
                             format="horizontal" 
@@ -456,7 +456,7 @@ const Blog = () => {
             </div>
 
             {/* AdSense Ad - Article Bottom */}
-            <div className="mt-8">
+            <div className="mt-6">
               <AdSenseAd 
                 slot="1357924680" 
                 format="rectangle" 
@@ -505,7 +505,7 @@ const Blog = () => {
         </div>
 
         {/* AdSense Ad - Blog Top */}
-        <div className="mb-12">
+        <div className="mb-8">
           <AdSenseAd 
             slot="2468135790" 
             format="horizontal" 
@@ -517,13 +517,14 @@ const Blog = () => {
           {blogPosts.map((post, index) => (
             <React.Fragment key={post.id}>
               <article className="cosmic-card overflow-hidden hover:shadow-lg transition-all duration-300 group cursor-pointer" onClick={() => setSelectedPost(post)}>
-                <div className="h-48 overflow-hidden">
-                  <EnhancedImage
+                <div className="overflow-hidden" style={{ height: '200px' }}>
+                  <OptimizedImage
                     src={post.image}
                     alt={post.imageAlt}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     width={400}
                     height={200}
+                    lazy={index > 1} // Only lazy load after first 2 images
                   />
                 </div>
                 
@@ -559,7 +560,7 @@ const Blog = () => {
 
               {/* Add ad after every 2 blog posts */}
               {(index + 1) % 2 === 0 && index < blogPosts.length - 1 && (
-                <div className="md:col-span-2 my-4">
+                <div className="md:col-span-2 my-2">
                   <AdSenseAd 
                     slot="1122334455" 
                     format="horizontal" 
@@ -572,7 +573,7 @@ const Blog = () => {
         </div>
 
         {/* AdSense Ad - Blog Bottom */}
-        <div className="mt-12">
+        <div className="mt-8">
           <AdSenseAd 
             slot="5566778899" 
             format="rectangle" 
