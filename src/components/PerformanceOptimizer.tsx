@@ -60,8 +60,9 @@ const PerformanceOptimizer: React.FC = () => {
     const optimizeImages = () => {
       const images = document.querySelectorAll('img[loading="lazy"]');
       images.forEach(img => {
-        if (!img.getAttribute('width') || !img.getAttribute('height')) {
-          console.warn('Image missing dimensions - may cause CLS:', img.src);
+        const imageElement = img as HTMLImageElement;
+        if (!imageElement.getAttribute('width') || !imageElement.getAttribute('height')) {
+          console.warn('Image missing dimensions - may cause CLS:', imageElement.src);
         }
       });
     };
