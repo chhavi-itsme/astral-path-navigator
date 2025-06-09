@@ -1,5 +1,6 @@
 
 import React, { Suspense, lazy } from "react";
+import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -116,43 +117,45 @@ const App = () => {
   usePerformanceMonitoring();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <CriticalResourcePreloader />
-        <BrowserRouter>
-          <div className="flex flex-col min-h-screen bg-background">
-            <Navbar />
-            <main className="flex-grow">
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/calculator" element={<Calculator />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/blog" element={<Blog />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/privacy" element={<Privacy />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-            </main>
-            
-            {/* Sitemap with enhanced lazy loading */}
-            <div className="cosmic-container mb-12">
-              <Suspense fallback={<LoadingSkeleton variant="text" count={3} />}>
-                <Sitemap />
-              </Suspense>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <CriticalResourcePreloader />
+          <BrowserRouter>
+            <div className="flex flex-col min-h-screen bg-background">
+              <Navbar />
+              <main className="flex-grow">
+                <Suspense fallback={<PageLoader />}>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/calculator" element={<Calculator />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/blog" element={<Blog />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/privacy" element={<Privacy />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+              </main>
+              
+              {/* Sitemap with enhanced lazy loading */}
+              <div className="cosmic-container mb-12">
+                <Suspense fallback={<LoadingSkeleton variant="text" count={3} />}>
+                  <Sitemap />
+                </Suspense>
+              </div>
+              
+              <Footer />
             </div>
-            
-            <Footer />
-          </div>
-        </BrowserRouter>
-        
-        {/* Performance monitoring component */}
-        <PerformanceOptimizer />
-      </TooltipProvider>
-    </QueryClientProvider>
+          </BrowserRouter>
+          
+          {/* Performance monitoring component */}
+          <PerformanceOptimizer />
+        </TooltipProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
   );
 };
 
