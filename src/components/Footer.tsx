@@ -30,6 +30,9 @@ const Footer = () => {
             <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">
               Contact
             </Link>
+            <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
+              Privacy Policy
+            </Link>
           </div>
           
           <div className="flex flex-col space-y-4">
@@ -58,6 +61,11 @@ const Footer = () => {
           <p className="text-sm text-muted-foreground">
             © {currentYear} saturnreturn.site. All rights reserved.
           </p>
+          <div className="flex space-x-4 mt-2 md:mt-0">
+            <Link to="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+              Privacy Policy
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
